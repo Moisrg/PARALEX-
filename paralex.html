@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PARALEX — Crónicas del Rey Demonio</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#04050d;--panel:#080b1a;--panel2:#0c1020;
+  --border:#161c36;--border2:#212850;
+  --gold:#c9a84c;--gold2:#e8cf7a;--gold3:#a07828;--golddim:#6a5030;
+  --red:#c04040;--red2:#e05050;
+  --green:#3a9e6a;--green2:#50d888;
+  --blue:#3a70d0;--blue2:#5090f0;
+  --violet:#8860f0;--violet2:#a888ff;
+  --teal:#28a090;--teal2:#40c8b8;
+  --orange:#d08040;
+  --text:#c8c0d8;--dim:#807898;--muted:#3a3858;
+}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font-size:16px;min-height:100dvh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 60% at 20% 110%,rgba(136,96,240,.07),transparent 60%),radial-gradient(ellipse 60% 50% at 80% -10%,rgba(201,168,76,.05),transparent 55%)}
+#fxCanvas{position:fixed;inset:0;pointer-events:none;z-index:900}
+#skillFlash{position:fixed;inset:0;pointer-events:none;z-index:899;opacity:0;transition:opacity .15s}
+.screen{display:none!important}
+.screen.on{display:flex!important;flex-direction:column;min-height:100dvh}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 18px rgba(201,168,76,.4))}50%{filter:drop-shadow(0 0 48px rgba(201,168,76,.85))}}
+@keyframes shimmer{0%,100%{text-shadow:0 0 28px rgba(201,168,76,.2)}50%{text-shadow:0 0 80px rgba(201,168,76,.55),0 0 160px rgba(201,168,76,.15)}}
+@keyframes twinkle{0%,100%{opacity:var(--lo);transform:scale(1)}50%{opacity:var(--hi);transform:scale(1.5)}}
+@keyframes shake{0%,100%{transform:translate(0)}15%{transform:translate(-5px,-2px)}35%{transform:translate(4px,2px)}55%{transform:translate(-3px,1px)}75%{transform:translate(2px,-1px)}}
+.shaking{animation:shake .38s ease!important}
+@keyframes rippleAnim{to{transform:scale(5);opacity:0}}
+.ripple{position:absolute;border-radius:50%;transform:scale(0);animation:rippleAnim .55s linear;background:rgba(255,255,255,.14);pointer-events:none}
+@keyframes sceneIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes choiceIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes barShine{0%{left:-100%}100%{left:250%}}
+@keyframes barCrit{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes tagAppear{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+@keyframes combatAura{0%,100%{box-shadow:none}50%{box-shadow:0 0 28px rgba(192,64,64,.1),inset 0 0 28px rgba(192,64,64,.04)}}
+@keyframes enemyAppear{from{opacity:0;transform:scale(.7) translateX(28px)}to{opacity:1;transform:scale(1) translateX(0)}}
+@keyframes enemyHit{0%,100%{background:rgba(192,64,64,.04)}45%{background:rgba(255,70,70,.16)}}
+@keyframes swing{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(-10px) rotate(-9deg) scale(1.1)}70%{transform:translateX(4px) rotate(3deg)}}
+@keyframes avatarBreath{0%,100%{box-shadow:0 0 10px rgba(201,168,76,.1)}50%{box-shadow:0 0 22px rgba(201,168,76,.3)}}
+@keyframes lvUpBounce{from{opacity:0;transform:scale(.75) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes numFloat{0%{opacity:1;transform:translate(-50%,-50%) scale(.8)}20%{opacity:1;transform:translate(-50%,-90%) scale(1.3)}80%{opacity:.8;transform:translate(-50%,-175%)}100%{opacity:0;transform:translate(-50%,-220%) scale(.7)}}
+@keyframes burstFade{0%,60%{opacity:1}100%{opacity:0}}
+@keyframes vtAnim{0%{opacity:0;transform:scale(.35)}22%{opacity:1;transform:scale(1.18)}55%{transform:scale(1)}92%{opacity:1}100%{opacity:0;transform:scale(1.1)}}
+@keyframes mwExpand{0%{width:0;height:0;opacity:.8}100%{width:300px;height:300px;opacity:0}}
+@keyframes deathPulse{0%,100%{filter:drop-shadow(0 0 6px rgba(192,64,64,.2))}50%{filter:drop-shadow(0 0 28px rgba(192,64,64,.7))}}
+@keyframes choicePulse{0%,100%{opacity:.5}50%{opacity:1;text-shadow:0 0 14px rgba(201,168,76,.5)}}
+@keyframes mapPing{0%,100%{transform:scale(.8);opacity:.5}50%{transform:scale(1.5);opacity:0}}
+@keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.5);opacity:0}}
+
+/* ══════════════════════════════════════════════════
+   INTRO — mobile
+══════════════════════════════════════════════════ */
+#intro{align-items:center;justify-content:center;text-align:center;padding:44px 18px 28px;overflow-y:auto;overflow-x:hidden;position:relative;min-height:100dvh;-webkit-overflow-scrolling:touch;}
+.stars-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) ease-in-out infinite var(--dl)}
+.intro-rune{font-size:72px;animation:bob 4.5s ease-in-out infinite,glow 3s ease-in-out infinite;user-select:none;margin-bottom:14px}
+.intro-title{font-family:'Cinzel Decorative',serif;font-size:36px;color:var(--gold);letter-spacing:.1em;margin-bottom:6px;animation:shimmer 4s ease-in-out infinite}
+.intro-sub{font-family:Cinzel,serif;font-size:9px;letter-spacing:.4em;color:var(--muted);text-transform:uppercase;margin-bottom:32px;animation:fadeUp .8s ease .3s both}
+.intro-divider{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--golddim),transparent);margin:0 auto 28px;animation:fadeUp .8s ease .5s both}
+.intro-lore{width:100%;font-size:14px;line-height:1.95;color:var(--dim);font-style:italic;text-align:left;border-left:2px solid var(--golddim);padding-left:16px;margin-bottom:32px;animation:fadeUp .9s ease .7s both}
+.intro-lore strong{color:var(--gold);font-style:normal}
+.intro-warn{font-family:Cinzel,serif;font-size:8px;letter-spacing:.28em;color:var(--muted);animation:fadeUp .8s ease .9s both,choicePulse 2.4s ease-in-out 1.6s infinite;margin-bottom:18px}
+
+/* ══════════════════════════════════════════════════
+   BOTONES — touch-friendly
+══════════════════════════════════════════════════ */
+.btn{font-family:Cinzel,serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;padding:14px 26px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;transition:all .18s;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.btn::before{content:'';position:absolute;top:0;left:-110%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);transition:left .35s}
+.btn:active::before{left:140%}
+.btn:active{background:rgba(201,168,76,.15);box-shadow:0 0 24px rgba(201,168,76,.28),inset 0 0 18px rgba(201,168,76,.05);transform:scale(.97)!important}
+.btn-lg{font-size:13px;padding:16px 48px;animation:fadeUp .8s ease 1.1s both}
+.btn-lg:active{background:var(--gold);color:var(--bg);font-weight:700}
+.btn-sm{font-size:10px;padding:11px 18px}
+.btn-red{border-color:var(--red2);color:var(--red2)}
+.btn-red:active{background:rgba(192,64,64,.15)}
+.btn-violet{border-color:var(--violet2);color:var(--violet2)}
+.btn-violet:active{background:rgba(136,96,240,.12)}
+.btn-teal{border-color:var(--teal2);color:var(--teal2)}
+.btn-teal:active{background:rgba(40,160,144,.12)}
+.btn-disabled{opacity:.3;pointer-events:none}
+
+/* ══════════════════════════════════════════════════
+   CREAR PERSONAJE — mobile
+══════════════════════════════════════════════════ */
+#create{align-items:stretch;justify-content:flex-start;padding:0;overflow-y:auto;min-height:100dvh}
+#create>div{padding:20px 16px 32px;width:100%}
+.create-wrap{width:100%;animation:fadeUp .6s ease}
+.create-head{text-align:center;margin-bottom:22px}
+.create-head h2{font-family:Cinzel,serif;font-size:17px;color:var(--gold);letter-spacing:.18em;margin-bottom:6px}
+.create-head p{font-size:13px;color:var(--dim);font-style:italic}
+.ccard{background:var(--panel);border:1px solid var(--border);padding:18px 14px;margin-bottom:14px;position:relative}
+.ccard::before{content:'';position:absolute;top:-1px;left:8%;right:8%;height:2px;background:linear-gradient(90deg,transparent,var(--golddim),transparent)}
+.ccard-title{font-family:Cinzel,serif;font-size:8px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+label{display:block;font-family:Cinzel,serif;font-size:8px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;margin-bottom:7px}
+input[type=text]{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);padding:14px 14px;color:var(--text);font-family:'EB Garamond',serif;font-size:18px;outline:none;margin-bottom:6px;transition:border-color .3s,box-shadow .3s;border-radius:2px;-webkit-appearance:none}
+input[type=text]:focus{border-color:var(--gold3);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.input-hint{font-size:11px;color:var(--muted);font-style:italic;margin-bottom:14px}
+.attr-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.pts-badge{font-family:Cinzel,serif;font-size:11px;color:var(--gold2);background:rgba(201,168,76,.06);border:1px solid var(--golddim);padding:4px 12px}
+.pts-badge span{font-size:16px;font-weight:700}
+.pts-badge.warn{color:var(--red2);border-color:var(--red);animation:barCrit 1s ease-in-out infinite}
+.pts-badge.done{color:var(--green2);border-color:var(--green);background:rgba(58,158,106,.08);}
+.attr-list{display:flex;flex-direction:column;gap:6px}
+/* atributos en 2 columnas en móvil: icono+nombre | barra | ctrl */
+.attr-row{display:grid;grid-template-columns:26px 1fr 88px;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:10px 10px;transition:border-color .2s}
+.attr-row:active{border-color:rgba(201,168,76,.22)}
+.attr-ico{font-size:16px;text-align:center}
+.attr-name{font-family:Cinzel,serif;font-size:10px;color:var(--text);letter-spacing:.04em}
+.attr-track{height:4px;background:rgba(255,255,255,.05);overflow:hidden;grid-column:2;margin-top:4px}
+.attr-fill{height:100%;background:linear-gradient(90deg,var(--gold3),var(--gold));transition:width .22s}
+.attr-ctrl{display:flex;align-items:center;gap:5px;grid-column:3;grid-row:1/3}
+.abtn{width:30px;height:30px;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--gold);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .12s;font-family:monospace;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.abtn:active{background:var(--gold);color:var(--bg);transform:scale(.88)}
+.aval{width:26px;text-align:center;font-family:Cinzel,serif;font-size:14px;color:var(--gold2);min-width:26px}
+.aval.pop{animation:popIn .3s cubic-bezier(.34,1.6,.64,1)}
+.attr-note{font-size:10px;color:var(--muted);text-align:right;margin-top:6px;font-style:italic}
+
+/* ══════════════════════════════════════════════════
+   AWAKENING — mobile
+══════════════════════════════════════════════════ */
+#awakening{align-items:center;justify-content:center;text-align:center;padding:32px 16px;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(136,96,240,.1),transparent 70%);min-height:100dvh}
+.awk-rune{font-size:64px;animation:popIn .8s cubic-bezier(.34,1.5,.64,1),glow 2.5s ease-in-out 1s infinite;margin-bottom:18px}
+.awk-title{font-family:Cinzel,serif;font-size:22px;color:var(--violet2);letter-spacing:.18em;margin-bottom:8px;animation:fadeUp .6s ease}
+.awk-card{background:var(--panel);border:1px solid rgba(136,96,240,.3);padding:20px 16px;width:100%;margin:14px auto;animation:fadeUp .6s ease .35s both;position:relative;overflow:hidden}
+.awk-card::before{content:'';position:absolute;top:-1px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,var(--violet2),transparent)}
+.awk-label{font-family:Cinzel,serif;font-size:8px;letter-spacing:.4em;color:var(--dim);text-transform:uppercase;margin-bottom:6px}
+.awk-value{font-family:Cinzel,serif;font-size:20px;color:var(--gold);font-weight:700;margin-bottom:4px}
+.awk-desc{font-size:13px;color:var(--dim);font-style:italic;line-height:1.6}
+.awk-sep{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:12px 0}
+.mana-badge{display:inline-block;padding:4px 14px;border:1px solid;border-radius:1px;font-family:Cinzel,serif;font-size:11px;letter-spacing:.12em;margin-top:4px}
+.mb-low{border-color:var(--muted);color:var(--dim)}
+.mb-med{border-color:var(--blue);color:var(--blue2)}
+.mb-high{border-color:var(--violet);color:var(--violet2);box-shadow:0 0 16px rgba(136,96,240,.2);animation:barCrit 2s ease-in-out infinite}
+
+/* ══════════════════════════════════════════════════
+   GAME LAYOUT — solo móvil
+══════════════════════════════════════════════════ */
+#game{flex-direction:column!important;overflow:hidden;height:100dvh;max-height:100dvh}
+.game-shell{display:flex;flex-direction:column;height:100dvh;max-height:100dvh;width:100%;overflow:hidden}
+
+/* ══════════════════════════════════════════════════
+   HUD TOPBAR — compacto móvil
+══════════════════════════════════════════════════ */
+.topbar{
+  flex-shrink:0;height:54px;
+  background:rgba(4,5,13,.97);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:0;
+  z-index:50;
+  box-shadow:0 2px 28px rgba(0,0,0,.6);
+  position:relative;
+}
+/* Brand — oculto en móvil */
+.tb-brand{display:none;}
+/* Capítulo */
+.tb-ch{display:none;}.tb-div{display:none;}
+/* Badge capítulo debajo del icono de marca */
+.hud-ch-tag{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);font-family:Cinzel,serif;font-size:6.5px;letter-spacing:.06em;color:var(--gold3);background:rgba(4,5,13,.95);border:1px solid rgba(201,168,76,.22);border-radius:2px;padding:1px 5px;white-space:nowrap;pointer-events:none;}
+.tb-sp{flex:1;}
+
+/* ── BLOQUE JUGADOR HUD ── */
+.hud-player{display:flex;align-items:center;gap:7px;padding:0 10px 0 8px;height:100%;flex-shrink:0;}
+/* Icono de Marca */
+.hud-marca-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--border2);background:rgba(201,168,76,.07);display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;transition:all .16s;position:relative;animation:avatarBreath 3.5s ease-in-out infinite;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.hud-marca-btn:active{border-color:var(--gold);background:rgba(201,168,76,.2);box-shadow:0 0 16px rgba(201,168,76,.4);transform:scale(.9);}
+.hud-marca-btn::after{content:'▾';position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--gold);opacity:.45;font-family:monospace;pointer-events:none;}
+.hud-marca-btn::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(201,168,76,.12);animation:avatarBreath 4s ease-in-out .5s infinite;pointer-events:none;}
+/* Nombre + nivel */
+.hud-identity{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+.hud-name{font-family:Cinzel,serif;font-size:12px;color:var(--gold2);font-weight:700;white-space:nowrap;line-height:1;letter-spacing:.02em;}
+.hud-lv-line{font-family:Cinzel,serif;font-size:7px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;line-height:1;}
+.hud-lv-line b{color:var(--gold3);font-size:8px;}
+/* Divisor */
+.hud-vdiv{width:1px;height:26px;background:var(--border2);flex-shrink:0;}
+/* Barras */
+.hud-bars{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;}
+.hud-bar-row{display:flex;align-items:center;gap:5px;}
+.hud-bar-ico{font-size:10px;flex-shrink:0;width:13px;text-align:center;line-height:1;}
+.hud-track{flex:1;height:5px;background:rgba(255,255,255,.06);overflow:hidden;border-radius:3px;box-shadow:inset 0 1px 2px rgba(0,0,0,.5);min-width:36px;}
+.hud-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1),background .4s;position:relative;overflow:hidden;}
+.hud-fill::after{content:'';position:absolute;top:0;left:-100%;width:45%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);animation:barShine 2.8s ease-in-out infinite;}
+.hf-v{background:linear-gradient(90deg,#2a4a38,var(--green));}
+.hf-v.crit{background:linear-gradient(90deg,#601020,var(--red2))!important;animation:barCrit .85s ease-in-out infinite;}
+.hf-m{background:linear-gradient(90deg,#1e2a5a,var(--blue2));}
+.hf-m.low{background:linear-gradient(90deg,#3a1a6a,var(--violet))!important;}
+.hud-bar-nums{font-family:Cinzel,serif;font-size:8px;color:var(--dim);white-space:nowrap;min-width:50px;text-align:right;font-variant-numeric:tabular-nums;}
+.hud-bar-nums b{color:var(--text);display:inline;transition:color .2s;}
+.hud-bar-nums b.bump{animation:popIn .3s ease;color:var(--gold2);}
+/* XP */
+.hud-xp-block{display:flex;flex-direction:column;gap:3px;padding:0 10px;height:100%;justify-content:center;border-left:1px solid var(--border2);flex-shrink:0;}
+.hud-xp-lbl{font-family:Cinzel,serif;font-size:6px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;}
+.hud-xp-row{display:flex;align-items:center;gap:5px;}
+.hud-xp-nums{font-family:Cinzel,serif;font-size:8px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.hud-xp-track{flex:1;height:3px;background:rgba(255,255,255,.05);overflow:hidden;border-radius:2px;min-width:34px;}
+.hud-xp-fill{height:100%;background:linear-gradient(90deg,#4a3810,var(--gold));transition:width .5s ease;position:relative;overflow:hidden;}
+.hud-xp-fill::after{content:'';position:absolute;top:0;left:-100%;width:45%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:barShine 3s ease-in-out infinite;}
+
+/* ══════════════════════════════════════════════════
+   PANEL DE PERFIL — desliza desde abajo en móvil
+══════════════════════════════════════════════════ */
+@keyframes profileIn{from{opacity:0;transform:translateY(100%);}to{opacity:1;transform:translateY(0);}}
+@keyframes profileOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(100%);}}
+@keyframes spin360{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes ringBurst{0%{transform:scale(.55);opacity:0;}55%{opacity:.9;}100%{transform:scale(1.35);opacity:0;}}
+.profile-backdrop{display:none;position:fixed;inset:0;z-index:140;background:rgba(2,3,10,.78);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);}
+.profile-backdrop.open{display:block;animation:fadeIn .18s ease;}
+
+/* Panel: sheet desde abajo, con margen lateral para no tocar bordes */
+.profile-panel{
+  display:none;position:fixed;
+  left:18px;right:18px;bottom:0;
+  max-height:calc(100dvh - 64px);
+  z-index:141;
+  background:rgba(5,7,18,.98);
+  border-top:2px solid rgba(201,168,76,.35);
+  border-radius:18px 18px 0 0;
+  flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 -8px 56px rgba(0,0,0,.9),0 0 0 1px rgba(201,168,76,.08);
+}
+.profile-panel.open{display:flex;animation:profileIn .3s cubic-bezier(.32,.72,0,1) forwards;}
+.profile-panel.closing{display:flex!important;animation:profileOut .2s ease forwards;}
+
+/* Handle táctil */
+.pp-handle{width:40px;height:4px;background:rgba(255,255,255,.15);border-radius:3px;margin:10px auto 0;flex-shrink:0;}
+
+/* Cabecera fija */
+.pp-header{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px 12px 14px;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,10,22,.99);
+  flex-shrink:0;position:relative;
+}
+.pp-close{
+  width:34px;height:34px;flex-shrink:0;
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  color:var(--dim);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:all .14s;order:3;margin-left:auto;
+}
+.pp-close:active{background:rgba(192,64,64,.2);border-color:var(--red2);color:var(--red2);}
+
+/* Icono compacto en cabecera */
+.pp-ico-wrap{position:relative;flex-shrink:0;}
+.pp-ring-outer{position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(201,168,76,.1);animation:avatarBreath 4.5s ease-in-out infinite;pointer-events:none;}
+.pp-ring-mid{display:none;}
+.pp-ring-burst{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(201,168,76,.6);pointer-events:none;opacity:0;}
+.pp-ring-burst.pop{animation:ringBurst .65s ease forwards;}
+.pp-ico{
+  width:48px;height:48px;border-radius:50%;
+  border:2px solid rgba(201,168,76,.4);
+  background:radial-gradient(circle,rgba(201,168,76,.12),transparent 70%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;position:relative;z-index:1;
+}
+.pp-ico.spinning{animation:spin360 .55s cubic-bezier(.4,0,.2,1);}
+
+/* Info de cabecera: nombre + marca */
+.pp-head-info{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+.pp-marca-name{font-family:Cinzel,serif;font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pp-marca-desc{font-size:11px;color:var(--dim);font-style:italic;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* ── Área scrollable del panel ── */
+.pp-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.pp-scroll::-webkit-scrollbar{width:0;}
+
+/* Stats rápidos: 3 columnas en 1 fila */
+.pp-stats-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:1px;background:var(--border);
+  border-bottom:1px solid var(--border);
+}
+.pp-stat{background:rgba(5,7,17,.98);padding:9px 10px;text-align:center;}
+.pp-stat-lbl{font-family:Cinzel,serif;font-size:6.5px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-bottom:3px;}
+.pp-stat-val{font-family:Cinzel,serif;font-size:14px;font-weight:700;line-height:1;}
+.pp-stat-val.c-gold{color:var(--gold2);}
+.pp-stat-val.c-green{color:var(--green2);}
+.pp-stat-val.c-blue{color:var(--blue2);}
+.pp-stat-val.c-violet{color:var(--violet2);}
+
+/* Barras vida/maná/xp — compactas */
+.pp-bars-wrap{padding:12px 14px 4px;}
+.pp-bar{margin-bottom:10px;}
+.pp-bar-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.pp-bar-lbl{font-family:Cinzel,serif;font-size:7px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;}
+.pp-bar-nums{font-family:Cinzel,serif;font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums;}
+.pp-track{height:7px;background:rgba(255,255,255,.05);overflow:hidden;border-radius:4px;}
+.pp-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
+.pp-fill::after{content:'';position:absolute;top:0;left:-100%;width:45%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:barShine 2.8s ease-in-out infinite;}
+.pf-v{background:linear-gradient(90deg,#2a4a38,var(--green));}
+.pf-v.crit{background:linear-gradient(90deg,#601020,var(--red2))!important;animation:barCrit .85s ease-in-out infinite;}
+.pf-m{background:linear-gradient(90deg,#1e2a5a,var(--blue2));}
+.pf-m.low{background:linear-gradient(90deg,#3a1a6a,var(--violet))!important;}
+.pf-x{background:linear-gradient(90deg,#4a3810,var(--gold));}
+
+/* Sección reutilizable */
+.pp-section{padding:0 14px 12px;}
+.pp-section-lbl{font-family:Cinzel,serif;font-size:6.5px;letter-spacing:.45em;color:var(--muted);text-transform:uppercase;padding:9px 0 7px;border-top:1px solid var(--border);margin-bottom:5px;}
+
+/* Atributos: 2 por fila */
+.pp-attrs-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.pp-attr{display:flex;align-items:center;gap:6px;padding:7px 8px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:2px;}
+.pp-attr:active{border-color:rgba(201,168,76,.25);background:rgba(201,168,76,.03);}
+.pp-attr-ico{font-size:13px;flex-shrink:0;}
+.pp-attr-name{font-family:Cinzel,serif;font-size:8px;color:var(--dim);letter-spacing:.03em;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pp-attr-val{font-family:Cinzel,serif;font-size:14px;color:var(--gold2);font-weight:700;flex-shrink:0;}
+.pp-attr-val.grew{animation:popIn .3s ease;}
+
+/* Estado */
+.pp-tags{display:flex;flex-wrap:wrap;gap:4px;min-height:6px;}
+.pp-no-fx{font-size:11px;color:var(--muted);font-style:italic;}
+
+/* Panel izquierdo — oculto en móvil */
+.panel-left{display:none;}
+.ps{padding:12px;border-bottom:1px solid var(--border)}
+.ps:last-child{border-bottom:none;flex:1}
+.slabel{font-family:Cinzel,serif;font-size:7px;letter-spacing:.5em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+
+/* Panel central — ocupa todo el ancho */
+.panel-center{flex:1;overflow:hidden;display:flex;flex-direction:column;background:rgba(5,6,15,.6);}
+.panel-center-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:64px;}
+.panel-center-scroll::-webkit-scrollbar{width:0;}
+/* Panel derecho — oculto en móvil */
+.panel-right{display:none;}
+
+/* Player card */
+.p-card{background:rgba(12,16,32,.8);border:1px solid var(--border2);padding:13px}
+.p-avatar{width:50px;height:50px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 9px;animation:avatarBreath 3.5s ease-in-out infinite}
+.p-name{font-family:Cinzel,serif;font-size:13px;color:var(--gold);font-weight:700;text-align:center;margin-bottom:2px}
+.p-marca{font-size:11px;color:var(--dim);text-align:center;margin-bottom:8px}
+.p-lv{display:flex;align-items:center;justify-content:center;margin-bottom:11px}
+.lv-badge{font-family:Cinzel,serif;font-size:11px;color:var(--gold2);background:linear-gradient(135deg,var(--golddim),var(--gold3));padding:2px 10px;letter-spacing:.1em}
+
+/* Bars */
+.sbar{margin-bottom:8px}
+.sbar-hd{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.sbar-val{color:var(--text);font-variant-numeric:tabular-nums}
+.bar-track{height:6px;background:rgba(255,255,255,.04);overflow:hidden;border-radius:3px;box-shadow:inset 0 1px 3px rgba(0,0,0,.4)}
+.bar-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.bar-fill::after{content:'';position:absolute;top:0;left:-100%;width:45%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);animation:barShine 2.8s ease-in-out infinite}
+.bv{background:linear-gradient(90deg,#2a4a38,var(--green))}
+.bv.crit{background:linear-gradient(90deg,#601020,var(--red2))!important;animation:barCrit .85s ease-in-out infinite}
+.bm{background:linear-gradient(90deg,#1e2a5a,var(--blue2))}
+.bm.low{background:linear-gradient(90deg,#3a1a6a,var(--violet))!important}
+.bx{background:linear-gradient(90deg,#4a3810,var(--gold))}
+
+/* Mini attrs */
+.ma{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:4px;padding:2px 5px;border-radius:2px;transition:background .18s}
+.ma:hover{background:rgba(255,255,255,.03)}
+.ma-n{color:var(--dim);display:flex;align-items:center;gap:4px}
+.ma-v{font-family:Cinzel,serif;font-size:10px;color:var(--gold2);transition:all .25s}
+.ma-v.grew{animation:popIn .35s ease}
+
+/* Status tags */
+.tag-row{display:flex;flex-wrap:wrap;gap:3px;min-height:4px}
+.stag{font-size:8px;letter-spacing:.07em;text-transform:uppercase;padding:2px 5px;border:1px solid;border-radius:1px;animation:tagAppear .3s cubic-bezier(.34,1.5,.64,1)}
+.stag-slow{border-color:var(--blue);color:var(--blue2);background:rgba(58,112,208,.1)}
+.stag-dark{border-color:#7858c0;color:#9878e0;background:rgba(120,88,192,.1)}
+.stag-null{border-color:var(--muted);color:var(--dim);background:rgba(58,56,88,.1)}
+.stag-shield{border-color:var(--green);color:var(--green2);background:rgba(58,158,106,.1)}
+.stag-burn{border-color:var(--orange);color:var(--orange);background:rgba(208,128,64,.1);animation:tagAppear .3s ease,barCrit .7s ease-in-out infinite}
+.stag-curse{border-color:var(--red);color:var(--red2);background:rgba(192,64,64,.1);animation:tagAppear .3s ease,barCrit .55s ease-in-out infinite}
+
+/* ══════════════════════════════════════════════════
+   WORLD MAP
+══════════════════════════════════════════════════ */
+.map-wrap{padding:13px}
+.world-map{position:relative;width:100%;height:190px;background:linear-gradient(160deg,#050810 0%,#080f1a 45%,#060c14 100%);border:1px solid var(--border2);overflow:hidden}
+.world-map svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.18}
+.mr{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:all .22s;padding:4px}
+.mr-dot{width:7px;height:7px;border-radius:50%;margin-bottom:2px;position:relative}
+.mr-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid currentColor;opacity:.3;animation:mapPing 2.2s ease-in-out infinite}
+.mr-name{font-family:Cinzel,serif;font-size:7px;letter-spacing:.06em;color:var(--dim);text-transform:uppercase;text-align:center;line-height:1.2;white-space:nowrap}
+.mr.cur .mr-name{color:var(--gold2)}
+.mr.cur .mr-dot::after{animation:ping 1s ease-in-out infinite}
+.mr.cur .mr-dot{box-shadow:0 0 8px currentColor}
+.mr.locked{opacity:.3;cursor:not-allowed}
+.mr:active:not(.locked){transform:scale(1.12)}
+.map-loc{font-size:10px;color:var(--muted);margin-top:6px;font-style:italic;font-family:Cinzel,serif;font-size:8px;letter-spacing:.12em}
+
+/* Chapter nav */
+/* ── Chapter nav ── */
+.ch-nav{
+  flex-shrink:0;
+  background:rgba(4,5,12,.98);
+  border-bottom:1px solid var(--border);
+  padding:10px 12px;
+  display:flex;gap:6px;
+  overflow-x:auto;overflow-y:visible;
+  -webkit-overflow-scrolling:touch;
+}
+.ch-nav::-webkit-scrollbar{display:none;}
+.ch-tab{
+  font-family:Cinzel,serif;
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:8px 14px;
+  border:1px solid var(--border);
+  color:var(--muted);
+  cursor:pointer;
+  background:rgba(255,255,255,.02);
+  border-radius:3px;
+  flex-shrink:0;
+  white-space:nowrap;
+  transition:background .14s,border-color .14s,color .14s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  display:flex;align-items:center;gap:5px;
+  line-height:1;
+}
+.ch-tab:active:not(.ch-locked){background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.4);}
+.ch-tab.ch-active{border-color:var(--gold3);color:var(--gold2);background:rgba(201,168,76,.08);box-shadow:0 0 8px rgba(201,168,76,.12);}
+.ch-tab.ch-done{border-color:rgba(58,158,106,.5);color:var(--green);background:rgba(58,158,106,.05);}
+.ch-tab.ch-locked{opacity:.25;cursor:not-allowed;}
+.ch-tab-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* Story */
+.story-area{padding:12px 12px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.story-box{background:var(--panel);border:1px solid var(--border);padding:16px 14px;position:relative;overflow:hidden;transition:border-color .4s;box-shadow:0 4px 20px rgba(0,0,0,.28)}
+.story-box::before{content:'';position:absolute;top:-1px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.12),transparent)}
+.sb-badge{font-family:Cinzel,serif;font-size:7px;letter-spacing:.45em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.sb-title{font-family:Cinzel,serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:11px;line-height:1.35}
+.sb-text{font-size:15px;line-height:1.9;color:var(--text)}
+.sb-text p{margin-bottom:10px}.sb-text p:last-child{margin:0}
+.sb-text strong{color:var(--gold2);font-weight:600}.sb-text em{color:var(--dim)}
+.sb-narr{border-left:2px solid var(--gold3);padding:8px 13px;margin-top:11px;font-size:13px;color:var(--dim);font-style:italic;line-height:1.75;background:rgba(201,168,76,.03)}
+.scene-anim{animation:sceneIn .5s cubic-bezier(.25,.46,.45,.94)}
+
+/* Choices */
+.choices-wrap{margin-top:2px}
+.choices-lbl{font-family:Cinzel,serif;font-size:7px;letter-spacing:.38em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;animation:choicePulse 2.5s ease-in-out infinite}
+.choice-btn{width:100%;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:13px 13px;color:var(--text);cursor:pointer;transition:background .15s,border-color .15s;margin-bottom:7px;text-align:left;font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;display:flex;align-items:flex-start;gap:9px;position:relative;overflow:hidden;animation:choiceIn .4s ease both;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.choice-btn:nth-child(1){animation-delay:.05s}.choice-btn:nth-child(2){animation-delay:.12s}.choice-btn:nth-child(3){animation-delay:.19s}
+.choice-btn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,rgba(201,168,76,.09),transparent);transition:width .22s}
+.choice-btn:active::before{width:100%}
+.choice-btn:active{border-color:rgba(201,168,76,.5);color:var(--gold2);}
+.choice-btn:last-child{margin-bottom:0}
+.ck{font-family:Cinzel,serif;font-size:9px;color:var(--gold);border:1px solid var(--border2);padding:3px 6px;flex-shrink:0;margin-top:2px;transition:all .15s;background:rgba(201,168,76,.05);letter-spacing:.06em}
+.choice-btn:active .ck{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.cfx{font-size:11px;color:var(--muted);font-style:italic;margin-top:3px}
+
+/* Skills panel */
+.sk-btn{width:100%;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:11px 10px;color:var(--text);cursor:pointer;transition:all .18s;margin-bottom:4px;text-align:left;display:flex;align-items:center;gap:7px;font-family:'EB Garamond',serif;font-size:12px;position:relative;overflow:hidden}
+.sk-btn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--violet2);transform:scaleY(0);transition:transform .18s;transform-origin:bottom}
+.sk-btn:active:not(.sk-off){border-color:var(--violet2);background:rgba(136,96,240,.06);}
+.sk-btn:active:not(.sk-off)::before{transform:scaleY(1)}
+.sk-off{opacity:.28;cursor:not-allowed}
+.sk-ico{font-size:14px}
+.sk-nm{font-size:11px}.sk-cost{font-size:10px;color:var(--blue2);font-family:Cinzel,serif}
+
+/* ══════════════════════════════════════════════════
+   COMBAT
+══════════════════════════════════════════════════ */
+.combat-wrap{padding:10px;animation:sceneIn .5s ease}
+.combat-panel{background:rgba(192,64,64,.03);border:1px solid rgba(192,64,64,.2);padding:12px;position:relative;overflow:hidden;animation:combatAura 2.5s ease-in-out infinite}
+.combat-panel::before,.combat-panel::after{content:'';position:absolute;width:38px;height:38px;pointer-events:none}
+.combat-panel::before{top:0;left:0;border-top:1px solid rgba(192,64,64,.35);border-left:1px solid rgba(192,64,64,.35)}
+.combat-panel::after{bottom:0;right:0;border-bottom:1px solid rgba(192,64,64,.35);border-right:1px solid rgba(192,64,64,.35)}
+.combat-hd{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.combat-title{font-family:Cinzel,serif;font-size:13px;color:var(--red2);font-weight:700;letter-spacing:.06em;animation:barCrit 2s ease-in-out infinite}
+.c-turn{font-family:Cinzel,serif;font-size:9px;color:var(--muted);margin-left:auto;letter-spacing:.12em}
+.enemy-card{background:rgba(192,64,64,.04);border:1px solid rgba(192,64,64,.16);padding:11px;margin-bottom:9px;transition:all .25s}
+.enemy-card.ehit{animation:enemyHit .35s ease}
+.enemy-card.eappear{animation:enemyAppear .7s cubic-bezier(.34,1.4,.64,1)}
+.e-top{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.e-ico{font-size:30px;transition:transform .25s}
+.e-ico.swing{animation:swing .5s ease}
+.e-name{font-family:Cinzel,serif;font-size:13px;color:var(--red2);font-weight:700}
+.e-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.e-bar-lbl{display:flex;justify-content:space-between;font-size:8px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.clog{height:80px;overflow-y:auto;background:rgba(0,0,0,.2);border:1px solid var(--border);padding:6px 9px;margin-bottom:9px;font-size:12px}
+.clog::-webkit-scrollbar{width:2px}.clog::-webkit-scrollbar-thumb{background:var(--border2)}
+.cl{line-height:1.65;padding:1px 0;border-bottom:1px solid rgba(255,255,255,.025);animation:sceneIn .2s ease}
+.cl:last-child{border-bottom:none}
+.cl-act{color:var(--dim)}.cl-dmg{color:#e07070;font-weight:500}.cl-heal{color:var(--green2);font-weight:500}
+.cl-sp{color:var(--violet2);font-weight:500}.cl-tn{color:var(--muted);font-style:italic;font-size:11px;text-align:center}.cl-e{color:#d45050}
+.c-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;-webkit-tap-highlight-color:transparent;}
+.post-combat{background:var(--panel);border:1px solid rgba(201,168,76,.2);padding:16px;animation:sceneIn .5s ease;box-shadow:0 0 28px rgba(201,168,76,.06);margin-top:10px}
+.post-title{font-family:Cinzel,serif;font-size:14px;color:var(--gold);font-weight:700;margin-bottom:9px}
+
+/* Right panel — oculto en móvil, el log se muestra en historia */
+.panel-right{display:none;}
+.evlog{display:flex;flex-direction:column;gap:3px;padding:12px}
+.ev{font-size:11px;line-height:1.55;padding:3px 7px;border-left:2px solid transparent;animation:choiceIn .22s ease}
+.ev-info{border-color:var(--muted);color:var(--dim)}
+.ev-story{border-color:var(--gold3);color:var(--text);background:rgba(201,168,76,.04)}
+.ev-action{border-color:var(--teal);color:var(--teal2)}
+.ev-danger{border-color:var(--red2);color:#e07070}
+.ev-success{border-color:var(--green);color:var(--green2)}
+.ev-special{border-color:var(--violet);color:var(--violet2)}
+
+/* FX elements */
+.dmg-num{position:fixed;font-family:Cinzel,serif;font-weight:700;pointer-events:none;z-index:1000;animation:numFloat 1.2s cubic-bezier(.25,1,.5,1) forwards;text-shadow:0 2px 8px rgba(0,0,0,.8),0 0 18px currentColor}
+.dn-enemy{color:#ff8080;font-size:22px}.dn-player{color:#ff4040;font-size:20px}.dn-heal{color:var(--green2);font-size:20px}
+.xp-pop{position:fixed;font-family:Cinzel,serif;font-size:13px;color:var(--gold);pointer-events:none;z-index:1000;animation:numFloat 1.4s ease forwards;text-shadow:0 0 10px rgba(201,168,76,.6);letter-spacing:.06em}
+.vburst-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:950;animation:burstFade 2.4s ease forwards}
+.vburst-txt{font-family:'Cinzel Decorative',serif;font-size:28px;color:var(--gold);letter-spacing:.14em;text-shadow:0 0 60px rgba(201,168,76,.9),0 0 120px rgba(201,168,76,.4);animation:vtAnim 2.4s ease forwards}
+.mana-wave{position:fixed;border-radius:50%;pointer-events:none;z-index:945;animation:mwExpand .9s ease-out forwards;transform:translate(-50%,-50%)}
+
+/* Overlays */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.overlay.open{display:flex;animation:fadeIn .22s ease}
+.ov-card{background:var(--panel);border:1px solid var(--border2);padding:22px 18px;max-width:98vw;width:94%;position:relative;animation:lvUpBounce .42s cubic-bezier(.34,1.5,.64,1);box-shadow:0 0 60px rgba(201,168,76,.1)}
+.ov-card::before{content:'';position:absolute;top:-1px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.ov-title{font-family:Cinzel,serif;font-size:14px;color:var(--gold);font-weight:700;margin-bottom:6px}
+.ov-sub{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:14px;line-height:1.6}
+.ov-list{display:flex;flex-direction:column;gap:6px}
+.ov-btn{background:rgba(255,255,255,.025);border:1px solid var(--border);padding:12px 13px;cursor:pointer;transition:background .14s,border-color .14s;display:flex;align-items:center;gap:8px;font-family:'EB Garamond',serif;font-size:15px;color:var(--text);text-align:left;width:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.ov-btn:active{border-color:var(--gold);background:rgba(201,168,76,.1);color:var(--gold2);}
+
+/* Game over */
+#gameover{align-items:center;justify-content:center;text-align:center;padding:40px 16px;min-height:100dvh}
+.go-ico{font-size:64px;animation:deathPulse 2s ease-in-out infinite;margin-bottom:16px}
+.go-title{font-family:'Cinzel Decorative',serif;font-size:30px;font-weight:700;color:var(--red2);letter-spacing:.07em;margin-bottom:10px;animation:fadeUp .6s ease .2s both}
+.go-sub{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:22px;width:100%;line-height:1.75;animation:fadeUp .6s ease .4s both}
+.go-stats{display:flex;gap:20px;background:var(--panel);border:1px solid var(--border);padding:14px 20px;margin-bottom:20px;animation:fadeUp .6s ease .6s both}
+.gos-l{font-size:8px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.gos-v{font-family:Cinzel,serif;font-size:20px;color:var(--gold)}
+
+/* Ending */
+#ending{align-items:flex-start;justify-content:flex-start;padding:28px 16px 40px;overflow-y:auto;min-height:100dvh;-webkit-overflow-scrolling:touch;}
+.ending-wrap{width:100%;text-align:center}
+.ending-ico{font-size:64px;margin-bottom:18px;animation:glow 3s ease-in-out infinite}
+.ending-title{font-family:'Cinzel Decorative',serif;font-size:26px;color:var(--gold);font-weight:700;letter-spacing:.08em;margin-bottom:12px;animation:fadeUp .6s ease .2s both}
+.ending-text{font-size:15px;line-height:1.95;color:var(--text);text-align:left;background:var(--panel);border:1px solid var(--border);padding:18px 14px;margin:0 0 18px;animation:fadeUp .7s ease .4s both;position:relative}
+.ending-text::before{content:'';position:absolute;top:-1px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.14),transparent)}
+.ending-text p{margin-bottom:11px}.ending-text p:last-child{margin:0}
+.ending-stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:22px;animation:fadeUp .7s ease .6s both}
+.est{background:var(--panel);border:1px solid var(--border);padding:12px 16px;text-align:center}
+.est-l{font-size:8px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.est-v{font-family:Cinzel,serif;font-size:19px;color:var(--gold)}
+
+/* Music ctrl — bottom right, touch friendly */
+#musicCtrl{position:fixed;bottom:14px;right:14px;z-index:300;display:flex;align-items:center;gap:6px;background:rgba(4,5,13,.9);border:1px solid var(--border);padding:8px 12px;font-family:Cinzel,serif;font-size:8px;letter-spacing:.16em;color:var(--muted);cursor:pointer;transition:all .16s;user-select:none;border-radius:2px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+#musicCtrl:active{border-color:rgba(201,168,76,.35);color:var(--dim);transform:scale(.94);}
+#musicCtrl .mic{font-size:13px;color:var(--gold);transition:color .2s}
+#musicCtrl.muted .mic{color:var(--muted)}
+#musicCtrl.muted{opacity:.45}
+/* ══════════════════════════════════════════════════
+   CLOUD SAVE — sección en panel de perfil
+══════════════════════════════════════════════════ */
+.pp-cloud{padding:0 0 4px;}
+.pp-cloud-box{
+  margin:0 14px 12px;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border2);
+  border-radius:6px;
+  overflow:hidden;
+}
+.pp-cloud-hd{
+  font-family:Cinzel,serif;font-size:6.5px;letter-spacing:.45em;
+  color:var(--muted);text-transform:uppercase;
+  padding:9px 12px 7px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:6px;
+}
+.pp-cloud-hd-ico{font-size:12px;}
+.cloud-status-row{display:flex;align-items:center;gap:8px;padding:10px 12px 4px;}
+.cloud-avatar{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:rgba(201,168,76,.08);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;overflow:hidden;}
+.cloud-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;}
+.cloud-info{flex:1;min-width:0;}
+.cloud-name{font-family:Cinzel,serif;font-size:10px;color:var(--gold2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+.cloud-sub{font-size:10px;color:var(--dim);font-style:italic;line-height:1.3;}
+.cloud-badge{display:inline-flex;align-items:center;gap:3px;font-family:Cinzel,serif;font-size:7px;letter-spacing:.12em;padding:2px 7px;border-radius:20px;text-transform:uppercase;}
+.cloud-badge.online{background:rgba(58,158,106,.12);border:1px solid rgba(58,158,106,.35);color:var(--green2);}
+.cloud-badge.offline{background:rgba(58,56,88,.12);border:1px solid var(--border2);color:var(--muted);}
+.cloud-badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.cloud-btns{display:flex;flex-direction:column;gap:5px;padding:8px 12px 12px;}
+.cloud-btn{
+  width:100%;padding:9px 12px;
+  font-family:Cinzel,serif;font-size:9px;letter-spacing:.08em;
+  border:1px solid var(--border2);
+  background:rgba(255,255,255,.03);
+  color:var(--dim);cursor:pointer;
+  border-radius:3px;
+  display:flex;align-items:center;gap:7px;
+  transition:all .14s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.cloud-btn:active{transform:scale(.97);}
+.cloud-btn.google{border-color:rgba(66,133,244,.4);color:#7ab4ff;background:rgba(66,133,244,.06);}
+.cloud-btn.google:active{background:rgba(66,133,244,.14);}
+.cloud-btn.save{border-color:rgba(201,168,76,.3);color:var(--gold2);background:rgba(201,168,76,.05);}
+.cloud-btn.save:active{background:rgba(201,168,76,.12);}
+.cloud-btn.load{border-color:rgba(58,158,106,.3);color:var(--green2);background:rgba(58,158,106,.05);}
+.cloud-btn.load:active{background:rgba(58,158,106,.12);}
+.cloud-btn.danger{border-color:rgba(192,64,64,.3);color:#e07070;background:rgba(192,64,64,.04);}
+.cloud-btn.danger:active{background:rgba(192,64,64,.1);}
+.cloud-btn-ico{font-size:14px;flex-shrink:0;}
+.cloud-btn-lbl{display:flex;flex-direction:column;gap:1px;text-align:left;}
+.cloud-btn-lbl span{font-size:8px;color:var(--muted);font-family:'EB Garamond',serif;letter-spacing:0;font-style:italic;}
+.cloud-btn[disabled]{opacity:.3;cursor:not-allowed;}
+.cloud-toast{
+  position:fixed;bottom:70px;left:50%;transform:translateX(-50%);
+  background:rgba(5,7,18,.97);border:1px solid var(--border2);
+  padding:9px 18px;border-radius:4px;
+  font-family:Cinzel,serif;font-size:9px;letter-spacing:.08em;
+  color:var(--text);z-index:500;
+  animation:fadeUp .25s ease;
+  white-space:nowrap;
+  box-shadow:0 4px 24px rgba(0,0,0,.6);
+}
+.cloud-toast.ok{border-color:rgba(58,158,106,.5);color:var(--green2);}
+.cloud-toast.err{border-color:rgba(192,64,64,.5);color:#e07070;}
+.cloud-save-time{font-size:9px;color:var(--muted);font-style:italic;padding:0 12px 8px;text-align:center;}
+.intro-btns{display:flex;flex-direction:column;gap:10px;align-items:center;width:100%;}
+.btn-continue{background:linear-gradient(135deg,#1a3a1a,#2a5a2a)!important;border-color:rgba(80,200,80,.3)!important;color:#90e890!important;}
+.btn-continue:hover{background:linear-gradient(135deg,#2a5a2a,#3a7a3a)!important;}
+.btn-continue-off{background:linear-gradient(135deg,#1a1a1a,#222)!important;border-color:rgba(100,100,100,.2)!important;color:#444!important;cursor:not-allowed!important;opacity:0.5!important;}
+.btn-continue-off:hover{background:linear-gradient(135deg,#1a1a1a,#222)!important;}
+</style>
+</head>
+<body>
+<canvas id="fxCanvas"></canvas>
+<div id="skillFlash"></div>
+
+<!-- ══════════ INTRO ══════════ -->
+<div id="intro" class="screen on">
+  <div class="stars-wrap" id="starsWrap"></div>
+  <div class="intro-rune">⧖</div>
+  <div class="intro-title">PARALEX</div>
+  <div class="intro-sub">Crónicas del Rey Demonio</div>
+  <div class="intro-divider"></div>
+  <div class="intro-lore">
+    Mucho antes de que el primer héroe portara una Marca, antes de que cualquier nombre fuera
+    recordado por la historia… el <strong>Rey Demonio Vrakar</strong> emergió del Vacío Primordial.<br><br>
+    Sus ejércitos consumen el Maná de la tierra. Los Portadores caen uno a uno.<br>
+    El mundo de Paralex agoniza.<br><br>
+    Tú no eres de este mundo. Pero algo te trajo aquí — y ese <strong>algo tiene un propósito</strong>.
+  </div>
+  <p class="intro-warn">— Renacido entre mundos —</p>
+  <div class="intro-btns">
+    <button class="btn btn-lg" onclick="Menu.nuevaPartida()">⧖ Nueva Partida</button>
+    <button class="btn btn-lg btn-continue" id="btnContinuar" onclick="Menu.continuar()">▶ Continuar</button>
+  </div>
+</div>
+
+<!-- ══════════ CREATE ══════════ -->
+<div id="create" class="screen">
+  <div style="padding:20px 16px 32px;width:100%;overflow-y:auto;flex:1;box-sizing:border-box;">
+  <div class="create-wrap">
+    <div class="create-head">
+      <h2>⧖ Creación del Portador</h2>
+      <p>Un alma renacida en Paralex. Define quién eres en este mundo.</p>
+    </div>
+    <div class="ccard">
+      <div class="ccard-title">I — Identidad</div>
+      <label for="pname">Nombre del Portador</label>
+      <input type="text" id="pname" placeholder="Tu nombre en este mundo…" maxlength="24" autocomplete="off">
+      <div class="input-hint">Este nombre quedará grabado en los anales de Paralex.</div>
+    </div>
+    <div class="ccard">
+      <div class="ccard-title">II — Distribución de Atributos</div>
+      <div class="attr-header">
+        <label style="margin:0">Asignar puntos base</label>
+        <div class="pts-badge" id="ptsBadge">Puntos: <span id="ptsLeft">50</span></div>
+      </div>
+      <div class="attr-list" id="attrGrid"></div>
+      <div class="attr-note">Máximo 100 por atributo · Mínimo 1 · Total: 50 puntos</div>
+    </div>
+    <div style="display:flex;gap:9px;justify-content:flex-end">
+      <button class="btn btn-sm" onclick="Nav.go('intro')">← Volver</button>
+      <button class="btn" onclick="Story.startCreate()" style="font-size:10px;padding:11px 28px">Despertar →</button>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ══════════ AWAKENING ══════════ -->
+<div id="awakening" class="screen">
+  <div style="display:flex;align-items:center;justify-content:center;padding:40px 20px;flex:1">
+  <div style="text-align:center;width:100%">
+    <div class="awk-rune" id="awkRune">✦</div>
+    <div class="awk-title">El Despertar</div>
+    <p style="font-size:14px;color:var(--dim);font-style:italic;margin-bottom:6px;animation:fadeUp .6s ease .2s both">El Maná de Paralex te reconoce. Una Marca despierta en ti.</p>
+    <div class="awk-card" id="awkCard">
+      <div class="awk-label">Tu Marca</div>
+      <div class="awk-value" id="awkMarca">—</div>
+      <div class="awk-desc" id="awkMarcaDesc">—</div>
+      <div class="awk-sep"></div>
+      <div class="awk-label">Nivel de Maná</div>
+      <div id="awkManaBadge"></div>
+      <div class="awk-desc" id="awkManaDesc" style="margin-top:6px">—</div>
+      <div class="awk-sep"></div>
+      <div class="awk-label">Estadísticas Iniciales</div>
+      <div id="awkStats" style="font-size:13px;color:var(--text);line-height:1.85;margin-top:6px"></div>
+    </div>
+    <button class="btn" id="awkBtn" onclick="Story.beginGame()" style="animation:fadeUp .6s ease .5s both;font-size:10px;padding:12px 30px">Comenzar la Historia →</button>
+  </div>
+  </div>
+</div>
+
+<!-- ══════════ GAME ══════════ -->
+<div id="game" class="screen">
+<div class="game-shell">
+  <div class="topbar">
+    <span class="tb-brand">PARALEX</span>
+    <span class="tb-ch" id="tbCh">Capítulo I — El Despertar</span>
+    <div class="tb-sp"></div>
+
+    <!-- ── BLOQUE JUGADOR HUD ── -->
+    <div class="hud-player">
+      <!-- Icono clickeable de la Marca -->
+      <div class="hud-marca-btn" id="hudMarcaBtn" onclick="Profile.toggle()" title="Ver perfil del portador">
+        <span id="hudMarcaIco">⧖</span>
+        <span class="hud-ch-tag" id="hudChTag">Cap. I</span>
+      </div>
+      <!-- Nombre y nivel -->
+      <div class="hud-identity">
+        <div class="hud-name" id="hudName">—</div>
+        <div class="hud-lv-line">Nivel <b id="hudLv">1</b> · <span id="hudMarcaTag">Marca</span></div>
+      </div>
+      <!-- Divisor -->
+      <div class="hud-vdiv"></div>
+      <!-- Barras Vida / Maná -->
+      <div class="hud-bars">
+        <div class="hud-bar-row">
+          <span class="hud-bar-ico">❤</span>
+          <div class="hud-track"><div class="hud-fill hf-v" id="hudBV" style="width:100%"></div></div>
+          <div class="hud-bar-nums"><b id="hudV">100</b><span>/<span id="hudVmax">100</span></span></div>
+        </div>
+        <div class="hud-bar-row">
+          <span class="hud-bar-ico">◈</span>
+          <div class="hud-track"><div class="hud-fill hf-m" id="hudBM" style="width:100%"></div></div>
+          <div class="hud-bar-nums"><b id="hudM">60</b><span>/<span id="hudMmax">60</span></span></div>
+        </div>
+      </div>
+      <!-- Divisor -->
+      <div class="hud-vdiv"></div>
+    </div>
+
+    <!-- Bloque XP -->
+    <div class="hud-xp-block">
+      <div class="hud-xp-lbl">Experiencia</div>
+      <div class="hud-xp-row">
+        <div class="hud-xp-track"><div class="hud-xp-fill" id="hudBX" style="width:0%"></div></div>
+        <div class="hud-xp-nums"><span id="hudXP">0</span>/<span id="hudXPmax">100</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEFT -->
+  <div class="panel-left">
+    <div class="ps">
+      <div class="slabel">Portador</div>
+      <div class="p-card">
+        <div class="p-avatar" id="gAvatar">⧖</div>
+        <div class="p-name" id="gName">—</div>
+        <div class="p-marca" id="gMarca">—</div>
+        <div class="p-lv"><div class="lv-badge">Nivel <span id="gLv">1</span></div></div>
+        <div id="gAnomaly" style="text-align:center;margin-bottom:8px"></div>
+        <div class="sbar">
+          <div class="sbar-hd"><span>❤ Vida</span><span class="sbar-val"><span id="gV">100</span>/<span id="gVmax">100</span></span></div>
+          <div class="bar-track"><div class="bar-fill bv" id="bV" style="width:100%"></div></div>
+        </div>
+        <div class="sbar">
+          <div class="sbar-hd"><span>◈ Maná</span><span class="sbar-val"><span id="gM">60</span>/<span id="gMmax">60</span></span></div>
+          <div class="bar-track"><div class="bar-fill bm" id="bM" style="width:100%"></div></div>
+        </div>
+        <div class="sbar">
+          <div class="sbar-hd"><span>✦ XP</span><span class="sbar-val"><span id="gXP">0</span>/<span id="gXPmax">100</span></span></div>
+          <div class="bar-track"><div class="bar-fill bx" id="bX" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="ps">
+      <div class="slabel">Atributos</div>
+      <div id="gAttrs"></div>
+    </div>
+    <div class="ps">
+      <div class="slabel">Estado</div>
+      <div class="tag-row" id="gTags"></div>
+      <div style="font-size:11px;color:var(--muted);font-style:italic" id="gTagNone">Sin efectos activos</div>
+    </div>
+    <div class="ps">
+      <div class="slabel" id="skLabel">Habilidades</div>
+      <div id="gSkills"></div>
+    </div>
+    <div class="map-wrap">
+      <div class="slabel">Mapa del Mundo</div>
+      <div class="world-map" id="worldMap">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M10,80 Q30,20 50,40 Q70,60 90,20" stroke="#c9a84c" stroke-width=".8" fill="none" stroke-dasharray="3,4"/>
+          <path d="M15,60 Q40,80 65,50 Q80,35 95,55" stroke="#3a70d0" stroke-width=".6" fill="none" stroke-dasharray="2,5"/>
+          <circle cx="48" cy="48" r="18" fill="rgba(201,168,76,.015)" stroke="rgba(201,168,76,.08)" stroke-width=".5"/>
+        </svg>
+      </div>
+      <div class="map-loc" id="mapLoc">Ubicación: —</div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="panel-center">
+    <div class="ch-nav" id="chNav"></div>
+    <div class="panel-center-scroll">
+    <div class="story-area" id="storyArea">
+      <div id="secStory">
+        <div class="story-box scene-anim" id="storyBox">
+          <div class="sb-badge" id="sbBadge">Capítulo I</div>
+          <div class="sb-title" id="sbTitle">Cargando…</div>
+          <div class="sb-text" id="sbText"></div>
+          <div class="sb-narr" id="sbNarr" style="display:none"></div>
+        </div>
+        <div class="choices-wrap" style="margin-top:9px">
+          <div class="choices-lbl">▼ ¿Qué harás?</div>
+          <div id="choiceList"></div>
+        </div>
+      </div>
+      <div id="secCombat" style="display:none">
+        <div class="combat-wrap">
+          <div class="combat-panel" id="combatPanel">
+            <div class="combat-hd">
+              <span style="font-size:17px">⚔</span>
+              <span class="combat-title">¡COMBATE!</span>
+              <span class="c-turn">Turno <span id="cTurn">1</span></span>
+            </div>
+            <div class="enemy-card" id="enemyCard">
+              <div class="e-top">
+                <span class="e-ico" id="cEico">👤</span>
+                <div>
+                  <div class="e-name" id="cEname">—</div>
+                  <div class="e-sub">Marca: <span id="cEmarca">—</span></div>
+                </div>
+              </div>
+              <div class="e-bar-lbl"><span>❤ Vida</span><span><span id="cEv">80</span>/<span id="cEvmax">80</span></span></div>
+              <div class="bar-track" style="height:7px"><div class="bar-fill" id="bE" style="width:100%;background:linear-gradient(90deg,#601020,var(--red2))"></div></div>
+              <div class="tag-row" id="cEtags" style="margin-top:5px"></div>
+            </div>
+            <div class="clog" id="cLog"></div>
+            <div class="c-btns" id="cBtns"></div>
+          </div>
+          <div class="post-combat" id="postCombat" style="display:none">
+            <div class="post-title" id="postTitle">¡Victoria!</div>
+            <div class="sb-text" id="postText" style="margin-bottom:11px"></div>
+            <div id="postChoices"></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /story-area -->
+    </div><!-- /panel-center-scroll -->
+  </div><!-- /panel-center -->
+  <div class="panel-right">
+    <div class="ps"><div class="slabel">Registro de Eventos</div></div>
+    <div class="evlog" id="evLog"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ PANEL DE PERFIL ══════════ -->
+<div class="profile-backdrop" id="profileBackdrop" onclick="Profile.close()"></div>
+<div class="profile-panel" id="profilePanel">
+  <!-- Handle táctil -->
+  <div class="pp-handle"></div>
+
+  <!-- Cabecera compacta horizontal -->
+  <div class="pp-header">
+    <div class="pp-ico-wrap">
+      <div class="pp-ring-outer"></div>
+      <div class="pp-ring-burst" id="ppRingBurst"></div>
+      <div class="pp-ico" id="ppIco">⧖</div>
+    </div>
+    <div class="pp-head-info">
+      <div class="pp-marca-name" id="ppMarcaNm">Marca de —</div>
+      <div class="pp-marca-desc" id="ppMarcaDesc">—</div>
+    </div>
+    <button class="pp-close" onclick="Profile.close()" title="Cerrar">✕</button>
+  </div>
+
+  <!-- Stats rápidos: Portador · Nivel · Maná -->
+  <div class="pp-stats-row">
+    <div class="pp-stat">
+      <div class="pp-stat-lbl">Portador</div>
+      <div class="pp-stat-val c-gold" id="ppName" style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div>
+    </div>
+    <div class="pp-stat">
+      <div class="pp-stat-lbl">Nivel</div>
+      <div class="pp-stat-val c-gold" id="ppLv">1</div>
+    </div>
+    <div class="pp-stat">
+      <div class="pp-stat-lbl">Maná</div>
+      <div class="pp-stat-val c-violet" id="ppManaLv">—</div>
+    </div>
+  </div>
+
+  <!-- Todo el contenido scrollable -->
+  <div class="pp-scroll">
+
+    <!-- Barras de vida / maná / XP -->
+    <div class="pp-bars-wrap">
+      <div class="pp-bar">
+        <div class="pp-bar-hd">
+          <span class="pp-bar-lbl">❤ Vida</span>
+          <span class="pp-bar-nums"><span id="ppVida">100</span> / <span id="ppVidaMax">100</span></span>
+        </div>
+        <div class="pp-track"><div class="pp-fill pf-v" id="ppBV" style="width:100%"></div></div>
+      </div>
+      <div class="pp-bar">
+        <div class="pp-bar-hd">
+          <span class="pp-bar-lbl">◈ Maná</span>
+          <span class="pp-bar-nums"><span id="ppMana">60</span> / <span id="ppManaMax">60</span></span>
+        </div>
+        <div class="pp-track"><div class="pp-fill pf-m" id="ppBM" style="width:100%"></div></div>
+      </div>
+      <div class="pp-bar">
+        <div class="pp-bar-hd">
+          <span class="pp-bar-lbl">✦ XP</span>
+          <span class="pp-bar-nums"><span id="ppXP">0</span> / <span id="ppXPmax">100</span></span>
+        </div>
+        <div class="pp-track"><div class="pp-fill pf-x" id="ppBX" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Atributos en 2 columnas -->
+    <div class="pp-section">
+      <div class="pp-section-lbl">Atributos</div>
+      <div class="pp-attrs-grid" id="ppAttrs"></div>
+    </div>
+
+    <!-- Estado -->
+    <div class="pp-section">
+      <div class="pp-section-lbl">Estado</div>
+      <div class="pp-tags" id="ppTags"></div>
+      <div class="pp-no-fx" id="ppNoFx">Sin efectos activos</div>
+    </div>
+
+    <!-- Guardado en la nube -->
+    <div class="pp-cloud">
+      <div class="pp-cloud-box">
+        <div class="pp-cloud-hd">
+          <span class="pp-cloud-hd-ico">☁</span>
+          Guardado en la Nube
+        </div>
+        <!-- Estado de sesión -->
+        <div class="cloud-status-row">
+          <div class="cloud-avatar" id="cloudAvatar">👤</div>
+          <div class="cloud-info">
+            <div class="cloud-name" id="cloudName">Invitado</div>
+            <div class="cloud-sub" id="cloudSub">Inicia sesión con Google para guardar</div>
+          </div>
+          <div class="cloud-badge offline" id="cloudBadge">
+            <span class="cloud-badge-dot"></span>
+            <span id="cloudBadgeTxt">Local</span>
+          </div>
+        </div>
+        <!-- Última sincronización -->
+        <div class="cloud-save-time" id="cloudSaveTime" style="display:none"></div>
+        <!-- Botones -->
+        <div class="cloud-btns" id="cloudBtns">
+          <!-- Se renderizan dinámicamente por Cloud.renderBtns() -->
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pp-scroll -->
+</div>
+
+<!-- ══════════ GAME OVER ══════════ -->
+<div id="gameover" class="screen">
+  <div class="go-ico">💀</div>
+  <div class="go-title">Has Caído</div>
+  <div class="go-sub" id="goSub">El mundo de Paralex llora la pérdida de su Portador.</div>
+  <div class="go-stats">
+    <div><div class="gos-l">Capítulo</div><div class="gos-v" id="goCh">I</div></div>
+    <div><div class="gos-l">Nivel</div><div class="gos-v" id="goLv">1</div></div>
+    <div><div class="gos-l">Victorias</div><div class="gos-v" id="goKl">0</div></div>
+  </div>
+  <button class="btn" onclick="Story.restart()" style="font-size:11px;padding:13px 34px">↺ Renacer de Nuevo</button>
+</div>
+
+<!-- ══════════ ENDING ══════════ -->
+<div id="ending" class="screen">
+  <div class="ending-wrap">
+    <div class="ending-ico">👑</div>
+    <div class="ending-title" id="endTitle">Victoria</div>
+    <div class="ending-text" id="endText"></div>
+    <div class="ending-stats" id="endStats"></div>
+    <button class="btn" onclick="Story.restart()" style="font-size:11px;padding:13px 34px">↺ Nueva Historia</button>
+  </div>
+</div>
+
+<!-- ══════════ LEVEL UP OVERLAY ══════════ -->
+<div class="overlay" id="ovLvUp">
+  <div class="ov-card">
+    <div class="ov-title">✦ ¡Subida de Nivel!</div>
+    <div class="ov-sub" id="ovSub">Tu poder crece. Elige un atributo para mejorar.</div>
+    <div class="ov-list" id="ovList"></div>
+  </div>
+</div>
+
+<div id="musicCtrl">
+  <span class="mic" id="musicIco">♫</span>
+  <span>MÚSICA</span>
+</div>
+<script>
+// ╔══════════════════════════════════════════════════
+//  AUDIO ENGINE
+// ╚══════════════════════════════════════════════════
+var _AC=null,_audioOk=false,_muted=false;
+function AC(){if(!_AC){try{_AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(_AC&&_AC.state==='suspended')_AC.resume();return _AC;}
+var _sfxG=null,_musG=null;
+function sfxG(){var a=AC();if(!a)return null;if(!_sfxG){_sfxG=a.createGain();_sfxG.gain.value=0.5;_sfxG.connect(a.destination);}return _sfxG;}
+function musG(){var a=AC();if(!a)return null;if(!_musG){_musG=a.createGain();_musG.gain.value=0;_musG.connect(a.destination);}return _musG;}
+function tone(f,tp,dur,vol,w,f2,ft){var a=AC(),g=sfxG();if(!a||!g)return;var o=a.createOscillator(),gn=a.createGain(),t=w||a.currentTime;o.type=tp||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+(ft||dur*.8));gn.gain.setValueAtTime(.001,t);gn.gain.linearRampToValueAtTime(vol||.3,t+.012);gn.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(gn);gn.connect(g);o.start(t);o.stop(t+dur+.05);}
+function nz(dur,vol,fq,q,w){var a=AC(),g=sfxG();if(!a||!g)return;var buf=a.createBuffer(1,Math.ceil(a.sampleRate*dur),a.sampleRate),d=buf.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;var src=a.createBufferSource(),gn=a.createGain(),fi=a.createBiquadFilter(),t=w||a.currentTime;fi.type='bandpass';fi.frequency.value=fq||600;fi.Q.value=q||1;gn.gain.setValueAtTime(vol||.15,t);gn.gain.exponentialRampToValueAtTime(.001,t+dur);src.buffer=buf;src.connect(fi);fi.connect(gn);gn.connect(g);src.start(t);}
+
+var BGM={_ns:[],_cur:null,
+  _fade:function(v,ms){var mg=musG();if(!mg)return;var a=AC();if(!a)return;var n=a.currentTime;mg.gain.cancelScheduledValues(n);mg.gain.setValueAtTime(mg.gain.value,n);mg.gain.linearRampToValueAtTime(v,n+ms/1000);},
+  _kill:function(){this._ns.forEach(function(n){try{n.stop();}catch(e){}});this._ns=[];},
+  play:function(name){if(this._cur===name)return;var self=this;this._fade(0,600);setTimeout(function(){self._kill();self._cur=name;if(name==='menu')self._menu();else if(name==='story')self._story();else if(name==='combat')self._combat();else if(name==='gameover')self._go();else if(name==='victory')self._vic();},660);},
+  stop:function(){this._fade(0,800);var self=this;setTimeout(function(){self._kill();self._cur=null;},900);},
+  _osc:function(f,tp,vol){var a=AC(),mg=musG();if(!a||!mg)return null;var o=a.createOscillator(),g=a.createGain();o.type=tp||'sine';o.frequency.value=f;g.gain.value=vol||.05;o.connect(g);g.connect(mg);o.start();this._ns.push(o);return o;},
+  _lfo:function(o,rate,depth){var a=AC(),mg=musG();if(!a||!mg)return;var l=a.createOscillator(),lg=a.createGain();l.frequency.value=rate||.1;lg.gain.value=depth||.5;l.connect(lg);lg.connect(o.frequency);l.start();this._ns.push(l);},
+  _melody:function(notes,interval,vol,type,cur){var a=AC(),mg=musG();if(!a||!mg)return;var self=this,i=0;var id=setInterval(function(){if(self._cur!==cur){clearInterval(id);return;}var o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.value=notes[i%notes.length];var t=a.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.04,t+.3);g.gain.exponentialRampToValueAtTime(.001,t+interval/1000*.9);o.connect(g);g.connect(mg);o.start(t);o.stop(t+interval/900);self._ns.push(o);i++;},interval);},
+  _menu:function(){var o1=this._osc(55,'sine',.055),o2=this._osc(110,'triangle',.035),o3=this._osc(82.4,'sine',.025);if(o1)this._lfo(o1,.07,.45);if(o2)this._lfo(o2,.09,.3);this._melody([220,261.6,329.6,392,440,392,329.6,261.6],2800,.04,'sine','menu');this._melody([880,1100,1320,1760],1900,.01,'sine','menu');this._fade(_muted?0:.28,1300);},
+  _story:function(){var o1=this._osc(110,'triangle',.042),o2=this._osc(165,'triangle',.028);if(o1)this._lfo(o1,.05,.3);if(o2)this._lfo(o2,.07,.25);this._melody([196,220,261.6,293.7,349.2,392,349.2,261.6,220],3300,.032,'sine','story');this._fade(_muted?0:.22,1400);},
+  _combat:function(){var a=AC(),mg=musG(),self=this;if(!a||!mg)return;var bpm=138,bt=60/bpm,bass=[55,55,73.4,55,65.4,55,73.4,82.4],bi=0;var id1=setInterval(function(){if(self._cur!=='combat'){clearInterval(id1);return;}var o=a.createOscillator(),g=a.createGain();o.type='sawtooth';o.frequency.value=bass[bi%bass.length];var t=a.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.09,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+bt*.72);o.connect(g);g.connect(mg);o.start(t);o.stop(t+bt);self._ns.push(o);bi++;},bt*1000);this._melody([330,392,440,523,440,392,330,293.7],bt*2000,.022,'square','combat');this._fade(_muted?0:.3,800);},
+  _go:function(){var a=AC(),mg=musG(),self=this;if(!a||!mg)return;var gf=[220,196,174.6,164.8,146.8,130.8,110],gi=0;function gn(){if(gi>=gf.length)return;var o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=gf[gi];var t=a.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.11,t+.2);g.gain.exponentialRampToValueAtTime(.001,t+3.6);o.connect(g);g.connect(mg);o.start(t);o.stop(t+4);self._ns.push(o);gi++;setTimeout(gn,2200);}gn();this._osc(40,'sine',.054);this._fade(_muted?0:.24,1000);},
+  _vic:function(){var a=AC(),mg=musG(),self=this;if(!a||!mg)return;[523,659,784,1046,784,659,784,1046,1318,1568].forEach(function(f,i){var o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=f;var t=a.currentTime+i*.12;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.1,t+.05);g.gain.exponentialRampToValueAtTime(.001,t+.5);o.connect(g);g.connect(mg);o.start(t);o.stop(t+.6);self._ns.push(o);});this._fade(_muted?0:.3,200);setTimeout(function(){self._fade(0,1500);},1700);}
+};
+
+var SFX={
+  btn:function(){if(!_audioOk)return;var t=AC().currentTime;tone(660,'sine',.06,.11,t);tone(880,'sine',.05,.07,t+.04);},
+  choice:function(){if(!_audioOk)return;tone(528,'sine',.07,.07,AC().currentTime);},
+  skill:function(m){if(!_audioOk)return;var t=AC().currentTime;var map={Tiempo:[[440,.1,.14,t,880,.1],[660,.3,.09,t+.1,330,null]],Realidad:[[660,.05,.18,t],[990,.05,.14,t+.04],[440,.3,.11,t+.1,220,null]],Vacío:[[110,.5,.2,t,55,null],[220,.35,.09,t+.1,110,null]],Energía:[[220,.12,.16,t,440,null],[880,.06,.09,t+.05]],Expansión:[[330,.45,.19,t,660,null],[495,.35,.09,t+.06,990,null]]};var ns=map[m]||[[440,.25,.13,t,880,null]];ns.forEach(function(n){tone(n[0],'sine',n[1],n[2],n[3],n[4]||0,n[5]||null);});if(m==='Energía')nz(.04,.18,1400,3,t);},
+  damage:function(hv){if(!_audioOk)return;var t=AC().currentTime;nz(.07,hv?.28:.18,300,2,t);tone(120,'sawtooth',.15,hv?.22:.15,t,60,.15);},
+  heal:function(){if(!_audioOk)return;var t=AC().currentTime;tone(523,'sine',.12,.14,t);tone(659,'sine',.12,.11,t+.07);tone(784,'sine',.22,.09,t+.14,1046,.2);},
+  victory:function(){if(!_audioOk)return;var t=AC().currentTime;[523,659,784,1046].forEach(function(f,i){tone(f,'sine',.3,.18,t+i*.12);});setTimeout(function(){var t2=AC().currentTime;[784,1046,1318,1568].forEach(function(f,i){tone(f,'triangle',.4,.14,t2+i*.1);});},600);},
+  levelUp:function(){if(!_audioOk)return;var t=AC().currentTime;[262,330,392,523,659,784,1046,1318].forEach(function(f,i){tone(f,'sine',.38,.15,t+i*.07);});tone(1568,'sine',.7,.18,t+.7,2093,.5);},
+  enemy:function(){if(!_audioOk)return;var t=AC().currentTime;tone(220,'sawtooth',.18,.18,t,110,.18);nz(.18,.16,600,1.5,t+.02);tone(110,'square',.3,.13,t+.18,55,.3);},
+  story:function(){if(!_audioOk)return;var t=AC().currentTime;tone(330,'sine',.18,.05,t,440,.15);tone(495,'triangle',.22,.04,t+.12);},
+  gameover:function(){if(!_audioOk)return;var t=AC().currentTime;[440,392,349,294,247,220].forEach(function(f,i){tone(f,'triangle',.55,.16,t+i*.2,f*.45,.5);});nz(.4,.11,200,.5,t+.3);},
+  chapter:function(){if(!_audioOk)return;var t=AC().currentTime;tone(392,'triangle',.3,.09,t);tone(523,'sine',.4,.11,t+.18);tone(659,'sine',.5,.09,t+.36,784,.3);}
+};
+
+// ╔══════════════════════════════════════════════════
+//  PARTICLES
+// ╚══════════════════════════════════════════════════
+var CVS=document.getElementById('fxCanvas'),CTX=CVS?CVS.getContext('2d'):null,PS=[];
+function rCVS(){if(CVS){CVS.width=window.innerWidth;CVS.height=window.innerHeight;}}
+rCVS();window.addEventListener('resize',rCVS);
+function P(x,y,o){this.x=x;this.y=y;this.vx=o.vx||0;this.vy=o.vy||0;this.life=o.life||1;this.ml=this.life;this.sz=o.sz||4;this.col=o.col||'#c9a84c';this.dec=o.dec||.022;this.grav=o.grav||0;this.glow=o.glow||false;this.shp=o.shp||'dot';this.rot=Math.random()*6.28;this.rv=o.rv||0;}
+P.prototype.tick=function(){this.x+=this.vx;this.y+=this.vy;this.vy+=this.grav;this.vx*=.965;this.vy*=.975;this.life-=this.dec;this.rot+=this.rv;};
+P.prototype.draw=function(c){var a=Math.max(0,this.life/this.ml);if(a<=0)return;c.save();c.globalAlpha=a;if(this.glow){c.shadowBlur=14;c.shadowColor=this.col;}c.fillStyle=this.col;c.strokeStyle=this.col;var s=this.sz*(this.shp==='ring'?1:a*.7+.3);if(this.shp==='dot'){c.beginPath();c.arc(this.x,this.y,s,0,6.28);c.fill();}else if(this.shp==='ring'){var rs=this.sz*(1-this.life/this.ml)*3+3;c.beginPath();c.arc(this.x,this.y,rs,0,6.28);c.lineWidth=2*(this.life/this.ml)+.4;c.stroke();}else if(this.shp==='star'){c.translate(this.x,this.y);c.rotate(this.rot);c.beginPath();for(var i=0;i<5;i++){var a1=i*1.2566-1.5708,a2=a1+.6283;c.lineTo(Math.cos(a1)*s,Math.sin(a1)*s);c.lineTo(Math.cos(a2)*s*.38,Math.sin(a2)*s*.38);}c.closePath();c.fill();}else if(this.shp==='spark'){c.translate(this.x,this.y);c.rotate(this.rot);c.beginPath();c.moveTo(-s*.12,0);c.lineTo(s,0);c.lineWidth=s*.28;c.stroke();}c.restore();};
+function ploop(){if(!CTX)return;CTX.clearRect(0,0,CVS.width,CVS.height);PS=PS.filter(function(p){p.tick();p.draw(CTX);return p.life>0;});requestAnimationFrame(ploop);}
+ploop();
+function burst(x,y,n,o){for(var i=0;i<n;i++){var a=Math.random()*6.28,sp=(o.sp||3)*(0.4+Math.random()*.9);PS.push(new P(x,y,{vx:Math.cos(a)*sp+(o.vx||0),vy:Math.sin(a)*sp+(o.vy||0),life:o.life||1,sz:o.sz||3,col:o.col||'#c9a84c',dec:o.dec||.025,grav:o.grav||.04,glow:o.glow||false,shp:o.shp||'dot',rv:(Math.random()-.5)*.14}));}}
+function ring(x,y,col,n){for(var i=0;i<(n||3);i++)PS.push(new P(x,y,{sz:5+i*10,col:col||'#4878c8',life:1.6-i*.15,dec:.028,shp:'ring'}));}
+function sparks(x,y,n,col){for(var i=0;i<n;i++){var a=Math.random()*6.28,sp=4+Math.random()*5;PS.push(new P(x,y,{vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.65,sz:3+Math.random()*4,col:col||'#ff8040',dec:.042,grav:.08,glow:true,shp:'spark',rv:a}));}}
+
+var MCOL={Tiempo:'#5090e0',Realidad:'#9070e0',Vacío:'#708090',Energía:'#e8d040',Expansión:'#30c0b0',Nulo:'#888'};
+function pos(id){var e=document.getElementById(id);if(!e)return{x:window.innerWidth/2,y:window.innerHeight/2};var r=e.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2};}
+
+var FX={
+  skill:function(m,type){var ep=pos('enemyCard'),pp=pos('gAvatar'),col=MCOL[m]||'#9880f0';var sf=document.getElementById('skillFlash');if(sf){sf.style.background=col;sf.style.opacity='.07';setTimeout(function(){sf.style.opacity='0';},170);}if(type==='heal'){burst(pp.x,pp.y,28,{col:'#50d878',sp:3,life:1.8,sz:5,glow:true,grav:-.06,dec:.018,shp:'star'});ring(pp.x,pp.y,'#40c870',3);}else if(type==='drain'){burst(ep.x,ep.y,14,{col:col,sp:3,life:.9,sz:4,glow:true,dec:.035});burst(pp.x,pp.y,10,{col:'#60d888',sp:2,life:1.2,sz:3,glow:true,dec:.025,grav:-.03});}else if(type==='spe'){ring(pp.x,pp.y,'#c9a84c',5);burst(pp.x,pp.y,38,{col:'#c9a84c',sp:5,life:2,sz:5,glow:true,grav:-.02,dec:.016,shp:'star'});}else{burst(ep.x,ep.y,20,{col:col,sp:6,life:1.1,sz:4,glow:true,dec:.03});ring(ep.x,ep.y,col,3);sparks(ep.x,ep.y,10,col);}},
+  hit:function(isP,amt){var p=isP?pos('gAvatar'):pos('enemyCard'),col=isP?'#ff4040':'#ffb030';burst(p.x,p.y,13,{col:col,sp:5,life:.75,sz:3,glow:true,dec:.042});sparks(p.x,p.y,7,col);var el=document.createElement('div');el.className='dmg-num '+(isP?'dn-player':'dn-enemy');el.textContent='-'+amt;el.style.cssText='left:'+p.x+'px;top:'+p.y+'px';document.body.appendChild(el);setTimeout(function(){el.parentNode&&el.parentNode.removeChild(el);},1250);if(isP){var mc=document.getElementById('storyArea');if(mc){mc.classList.remove('shaking');void mc.offsetWidth;mc.classList.add('shaking');setTimeout(function(){mc.classList.remove('shaking');},420);}}},
+  heal:function(amt){var p=pos('gAvatar');burst(p.x,p.y,20,{col:'#60d888',sp:2.5,life:1.6,sz:4,glow:true,grav:-.05,dec:.02,shp:'star'});var el=document.createElement('div');el.className='dmg-num dn-heal';el.textContent='+'+amt;el.style.cssText='left:'+p.x+'px;top:'+p.y+'px';document.body.appendChild(el);setTimeout(function(){el.parentNode&&el.parentNode.removeChild(el);},1250);},
+  mana:function(m){var p=pos('gAvatar'),col=(m&&MCOL[m])||'#3a70d0';var w=document.createElement('div');w.className='mana-wave';w.style.cssText='left:'+p.x+'px;top:'+p.y+'px;border:2px solid '+col+';background:radial-gradient(circle,rgba(58,112,208,.05),transparent 70%)';document.body.appendChild(w);ring(p.x,p.y,col,3);burst(p.x,p.y,16,{col:col,sp:3.5,life:1.2,sz:3,glow:true,dec:.025});setTimeout(function(){w.parentNode&&w.parentNode.removeChild(w);},1000);},
+  victory:function(){var cx=window.innerWidth/2,cy=window.innerHeight/2;var b=document.createElement('div');b.className='vburst-wrap';var t=document.createElement('div');t.className='vburst-txt';t.textContent='¡VICTORIA!';b.appendChild(t);document.body.appendChild(b);burst(cx,cy,65,{col:'#c9a84c',sp:9,life:2.2,sz:5,glow:true,shp:'star',grav:.03,dec:.014});ring(cx,cy,'#c9a84c',5);setTimeout(function(){b.parentNode&&b.parentNode.removeChild(b);},2500);},
+  lvUp:function(){var cx=window.innerWidth/2,cy=window.innerHeight*.38;burst(cx,cy,55,{col:'#c9a84c',sp:7,life:2.2,sz:6,glow:true,shp:'star',grav:-.05,dec:.014});ring(cx,cy,'#c9a84c',6);},
+  xpGain:function(amt){var p=pos('gAvatar');var el=document.createElement('div');el.className='xp-pop';el.textContent='+'+amt+' XP';el.style.cssText='left:'+p.x+'px;top:'+(p.y+28)+'px';document.body.appendChild(el);setTimeout(function(){el.parentNode&&el.parentNode.removeChild(el);},1500);},
+  enemyIn:function(){var ec=document.getElementById('enemyCard');if(ec){ec.classList.remove('eappear');void ec.offsetWidth;ec.classList.add('eappear');}var ep=pos('enemyCard');ring(ep.x,ep.y,'#c04040',3);burst(ep.x,ep.y,18,{col:'#e05050',sp:4,life:1,sz:3,glow:true,dec:.04});},
+  scene:function(){var sb=document.getElementById('storyBox');if(!sb)return;sb.style.transition='none';sb.style.opacity='0';sb.style.transform='translateY(14px)';setTimeout(function(){sb.style.transition='opacity .45s ease,transform .45s ease';sb.style.opacity='1';sb.style.transform='translateY(0)';},30);}
+};
+
+// Stars intro
+(function(){var c=document.getElementById('starsWrap');if(!c)return;for(var i=0;i<65;i++){var s=document.createElement('div');s.className='star';var sz=Math.random()*2.4+.5;s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(2+Math.random()*5)+'s;--dl:'+(Math.random()*3)+'s;--lo:'+(Math.random()*.12)+';--hi:'+(Math.random()*.5+.18);c.appendChild(s);}})();
+
+// Audio unlock + ripple + btn SFX
+document.addEventListener('click',function(){AC();_audioOk=true;},{once:true});
+document.addEventListener('keydown',function(){AC();_audioOk=true;},{once:true});
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.btn,.choice-btn,.ov-btn');if(!b)return;
+  var r=document.createElement('span');r.className='ripple';var br=b.getBoundingClientRect(),sz=Math.max(br.width,br.height);
+  r.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(e.clientX-br.left-sz/2)+'px;top:'+(e.clientY-br.top-sz/2)+'px';
+  b.appendChild(r);setTimeout(function(){r.parentNode&&r.parentNode.removeChild(r);},580);
+  if(!b.classList.contains('choice-btn')&&!b.classList.contains('sk-btn')&&!b.classList.contains('ov-btn'))SFX.btn();
+});
+document.getElementById('musicCtrl').addEventListener('click',function(){
+  _muted=!_muted;var mg=musG();if(mg)mg.gain.value=_muted?0:.25;
+  document.getElementById('musicCtrl').classList.toggle('muted',_muted);
+  document.getElementById('musicIco').textContent=_muted?'♪':'♫';
+});
+document.addEventListener('click',function(){if(!_muted)BGM.play('menu');},{once:true});
+
+// ╔══════════════════════════════════════════════════
+//  GAME DATA
+// ╚══════════════════════════════════════════════════
+var MARCAS=['Tiempo','Realidad','Vacío','Energía','Expansión'];
+var MICONS={Tiempo:'⏳',Realidad:'🌀',Vacío:'🕳️',Energía:'⚡',Expansión:'🌐',Nulo:'⭕'};
+var MDESC={
+  Tiempo:'Controla el flujo del tiempo. Ralentiza y paraliza enemigos.',
+  Realidad:'Distorsiona el espacio percibido. Confunde y fractura realidades.',
+  Vacío:'Absorbe y anula energía enemiga. Drena la fuerza vital.',
+  Energía:'Libera descargas de maná puro. Alta potencia destructiva.',
+  Expansión:'Ondas que presionan y regeneran. Versátil y equilibrada.'
+};
+var MANA_LVL=[
+  {id:'bajo',n:'Bajo',badge:'mb-low',bonus:{hp:0,mp:0},desc:'El maná apenas despierta. Inicio modesto, pero sin límites.'},
+  {id:'medio',n:'Medio',badge:'mb-med',bonus:{hp:20,mp:20},desc:'Despertar equilibrado. Vida y Maná aumentados en 20.'},
+  {id:'alto',n:'Alto',badge:'mb-high',bonus:{hp:50,mp:50},desc:'Torrente de maná. Vida y Maná aumentados en 50. Habilidades potenciadas.'}
+];
+var ADEFS=[
+  {k:'fuerza',   n:'Fuerza',       i:'⚔',  d:'Daño físico'},
+  {k:'velocidad',n:'Velocidad',    i:'💨', d:'Evasión y huida'},
+  {k:'intelig',  n:'Inteligencia', i:'📖', d:'Potencia de habilidades'},
+  {k:'resisten', n:'Resistencia',  i:'🛡', d:'Reducción de daño'},
+  {k:'control',  n:'Control Maná', i:'◈',  d:'Reserva y eficiencia'},
+];
+var SKILLS={
+  Tiempo:[
+    {id:'ralen',n:'Ralentizar',    i:'⏱',cost:18,pow:20,t:'atk',st:{tp:'slow',lb:'⏱ Lento',tu:2}},
+    {id:'pulso',n:'Pulso Temporal',i:'💥',cost:34,pow:42,t:'atk',st:{tp:'slow',lb:'⏱ Paraliz.',tu:3}},
+    {id:'ancla',n:'Anclaje',       i:'⚓',cost:50,pow:0, t:'spe'},
+  ],
+  Realidad:[
+    {id:'dist',n:'Distorsión',  i:'🌀',cost:16,pow:18,t:'atk',st:{tp:'dark',lb:'🌀 Confund.',tu:1}},
+    {id:'frac',n:'Fractura',    i:'💔',cost:30,pow:38,t:'atk'},
+    {id:'escu',n:'Escudo Real', i:'🛡',cost:26,pow:26,t:'heal'},
+  ],
+  Vacío:[
+    {id:'abso',n:'Absorber',    i:'🕳',cost:18,pow:16,t:'drain',st:{tp:'null',lb:'⭕ Anulado',tu:1}},
+    {id:'col', n:'Colapso',     i:'💀',cost:38,pow:48,t:'atk',  st:{tp:'null',lb:'⭕ Vacío',tu:2}},
+    {id:'barr',n:'Barrera Nula',i:'⭕',cost:24,pow:24,t:'heal'},
+  ],
+  Energía:[
+    {id:'desc',n:'Descarga',    i:'⚡',cost:16,pow:22,t:'atk'},
+    {id:'torm',n:'Tormenta',    i:'🌩',cost:36,pow:48,t:'atk',st:{tp:'burn',lb:'🔥 Ardiendo',tu:2}},
+    {id:'carg',n:'Carga Vital', i:'💛',cost:20,pow:26,t:'heal'},
+  ],
+  Expansión:[
+    {id:'ond', n:'Onda Expansiva',i:'🌊',cost:20,pow:24,t:'atk',st:{tp:'slow',lb:'🌊 Presión',tu:1}},
+    {id:'camp',n:'Campo Amplio',  i:'🌐',cost:33,pow:40,t:'atk'},
+    {id:'reg', n:'Regenerar',     i:'♻',cost:18,pow:28,t:'heal'},
+  ],
+};
+
+var MAP_REG=[
+  {id:'camara',   n:'Cámara\nde Marcas',   x:48,y:70,col:'#9070e0',ch:1},
+  {id:'erathos',  n:'Aldea\nErathos',       x:28,y:50,col:'#50a870',ch:2},
+  {id:'bosque',   n:'Bosque\nOscuro',       x:20,y:32,col:'#306840',ch:3},
+  {id:'torre',    n:'Torre\nde los Sabios', x:62,y:42,col:'#c9a84c',ch:4},
+  {id:'frontera', n:'Frontera\nDemoníaca',  x:74,y:26,col:'#c05040',ch:5},
+  {id:'ciudadela',n:'Ciudadela\nde Vrakar', x:82,y:12,col:'#902020',ch:6},
+];
+
+var CHAPTERS=[
+{id:1,title:'Capítulo I — El Despertar',loc:'camara',scenes:[
+ {id:'c1s1',
+  text:'<p>La oscuridad se quiebra de golpe. Un pulso cálido desde el centro del pecho. Abres los ojos en una sala circular de piedra negra cubierta de <strong>símbolos que emiten luz dorada</strong>. El aire huele a energía viva.</p><p>No sabes cómo llegaste aquí. Pero cada instinto te dice que este lugar es el comienzo de algo mucho más grande.</p>',
+  narr:'Una Marca late en tu pecho por primera vez. Algo en este mundo te reconoce.',
+  ch:[{t:'Examinar los símbolos en las paredes',fx:'+2 Inteligencia',nx:'c1s2'},{t:'Gritar para ver si alguien responde',fx:'Puede atraer atención peligrosa',nx:'c1s3'},{t:'Concentrarte en la Marca del pecho',fx:'+15 Maná',nx:'c1s4'}]},
+ {id:'c1s2',
+  text:'<p>Los símbolos son un <strong>registro</strong>. Cada uno representa un Portador que despertó aquí antes. La mayoría están tachados con una X roja. En un espejo roto ves tu Marca ya activa.</p><p>Al contar los nombres sin tachar: cuatro. Eres el quinto que sigue vivo.</p>',
+  narr:'La información tiene un precio, pero también un valor.',
+  on:function(p){addStat(p,'intelig',2);log('Examinar: +2 Inteligencia','ev-action');},
+  ch:[{t:'Avanzar hacia la puerta del fondo',nx:'c1s6'},{t:'Buscar más pistas en el suelo',fx:'+XP',nx:'c1s5'}]},
+ {id:'c1s3',
+  text:'<p>Tu voz resuena en la piedra. Luego pasos pesados. Un <strong>hombre enmascarado</strong> entra con una daga de energía solidificada.</p><p>"<em>Otro despertado. Soy el Custodio. Los que fallan son archivados.</em>" Señala una mancha oscura con forma de cuerpo.</p>',
+  narr:'Llamaste atención. No toda la atención es buena.',
+  ch:[{t:'¡Atacar con tu Marca antes de que actúe!',fx:'Combate — ventaja de sorpresa',nx:'c1_cb1'},{t:'Intentar hablar: "No soy tu enemigo"',fx:'Intento de negociar',nx:'c1s3b'}]},
+ {id:'c1s3b',
+  text:'<p>El Custodio se detiene un segundo. "<em>Curioso. Los que gritan suelen atacar primero.</em>" Baja la daga levemente. "<em>Treinta segundos. Convénceme de que vales el aire que consumes.</em>"</p>',
+  narr:'Una oportunidad rara. No la desperdicies.',
+  ch:[{t:'Demostrar control de tu Marca',nx:'c1_cb1'},{t:'"Sé dónde están los otros cuatro Portadores"',fx:'+Aliado inesperado',nx:'c1s3c'}]},
+ {id:'c1s3c',
+  text:'<p>El Custodio guarda la daga. "<em>Eso es... inesperado.</em>" Te observa. "<em>Primera vez que alguien propone algo antes de morir. Sal de aquí y prueba tu valía afuera. Después hablamos.</em>"</p>',
+  on:function(p){G.flags.custodioAliado=1;giveXP(p,30);log('Ganaste la confianza del Custodio','ev-special');},
+  ch:[{t:'Salir hacia el pasillo',nx:'c1s6'}]},
+ {id:'c1s4',
+  text:'<p>Cierras los ojos. La Marca se expande desde el pecho como un río descubriendo su cauce. Cuando abres los ojos puedes <strong>ver corrientes de energía</strong> en el aire. El Maná es real y tú puedes tocarlo.</p>',
+  narr:'Tu Marca despertó de verdad.',
+  on:function(p){p.mana=Math.min(p.mana+15,p.manaMax);FX.mana(p.marca);SFX.story();log('+15 Maná','ev-success');UI.update();},
+  ch:[{t:'Avanzar hacia la puerta',nx:'c1s6'},{t:'Canalizar energía hacia tu cuerpo',fx:'+20 Vida',nx:'c1s4b'}]},
+ {id:'c1s4b',
+  text:'<p>El Maná se hace físico. Tus músculos se endurecen. La piel se vuelve ligeramente más densa. No eres invencible — pero eres más de lo que eras hace cinco minutos.</p>',
+  on:function(p){p.vida=Math.min(p.vida+20,p.vidaMax);log('+20 Vida','ev-success');UI.update();},
+  ch:[{t:'Continuar hacia adelante',nx:'c1s6'}]},
+ {id:'c1s5',
+  text:'<p>Encuentras cristales de maná rotos y una nota arrugada: <em>"Si alguien lee esto — el Custodio tiene debilidades. Ataca antes de que active su escudo."</em></p><p>Firmado por el Portador #3.</p>',
+  on:function(p){G.flags.custodioInfo=1;giveXP(p,20);log('Nota del Portador #3 encontrada','ev-special');},
+  ch:[{t:'Guardar la nota y avanzar',nx:'c1s6'}]},
+ {id:'c1s6',
+  text:'<p>Un pasillo con cristales de Maná en las paredes. Al fondo una figura joven de espaldas. "<em>Llevo dos horas buscando la salida</em>", dice sin girarse. "<em>Mi Marca tardó cuatro horas. La tuya parece diferente.</em>"</p><p>Se gira. <strong>Kael</strong>. Con las mismas preguntas que tú.</p>',
+  narr:'El primer aliado posible de tu historia en Paralex.',
+  on:function(p){G.flags.kael=1;},
+  ch:[{t:'Proponer trabajar juntos',fx:'+Aliado permanente',nx:'c1s7'},{t:'Intercambiar información sin comprometerte',fx:'Equilibrado',nx:'c1s7b'},{t:'Desconfiar — nadie da nada gratis aquí',nx:'c1s7c'}]},
+ {id:'c1s7',
+  text:'<p>Kael asiente. "<em>Sabía que llegaría alguien con criterio.</em>" Extiende la mano con una Marca de color diferente a la tuya. "<em>Dos Portadores juntos tienen más opciones. ¿Hacia arriba o a las profundidades?</em>"</p>',
+  on:function(p){G.flags.kaelAlly=1;giveXP(p,40);log('Kael es tu aliado','ev-special');},
+  ch:[{t:'Subir a la superficie',fx:'Capítulo II',nx:'c2s1'},{t:'Descender primero — mayor recompensa',fx:'+Maná máximo',nx:'c1_prof'}]},
+ {id:'c1s7b',
+  text:'<p>Kael respeta tu postura. "<em>Inteligente. La confianza se gana con hechos.</em>" Te comparte lo básico sobre la Cámara y señala la salida.</p>',
+  on:function(p){G.flags.kaelNeutral=1;giveXP(p,25);},
+  ch:[{t:'Subir a la superficie',nx:'c2s1'}]},
+ {id:'c1s7c',
+  text:'<p>Kael no se ofende. "<em>Razonable.</em>" Señala dos pasillos. "<em>Toma el izquierdo. Si los dos llegamos arriba, quizás reconsideras.</em>"</p>',
+  on:function(p){giveXP(p,15);},
+  ch:[{t:'Tomar el pasillo izquierdo',nx:'c2s1'}]},
+ {id:'c1_prof',
+  text:'<p>Las profundidades huelen a poder concentrado. Una sala circular con una <strong>esfera de Maná negro</strong> pulsando en el centro. Una Anomalía Sellada. Kael retrocede. "<em>Eso vale una fortuna o una muerte.</em>"</p>',
+  ch:[{t:'Absorber la energía de la esfera',fx:'+ManaMax, riesgo',nx:'c1_prof2'},{t:'Estudiarla sin tocarla',fx:'+XP +Inteligencia',nx:'c1_prof3'}]},
+ {id:'c1_prof2',
+  text:'<p>El contacto es absoluto. El Maná negro explota hacia adentro. Dolor, luego calma. La esfera desaparece. Tu reserva de maná creció dramáticamente — pero algo cambió.</p>',
+  on:function(p){p.manaMax+=25;p.mana=Math.min(p.mana+25,p.manaMax);var d=Math.floor(p.vidaMax*.14);p.vida=Math.max(p.vida-d,1);FX.mana(p.marca);log('Anomalía absorbida: ManaMax +25, Vida -'+d,'ev-special');UI.update();},
+  ch:[{t:'Continuar hacia la superficie',nx:'c2s1'}]},
+ {id:'c1_prof3',
+  text:'<p>La esfera es artificial — construida, no natural. Alguien la colocó aquí como señuelo o prueba. La información vale más que el riesgo de tocarla.</p>',
+  on:function(p){addStat(p,'intelig',2);giveXP(p,30);log('+2 Inteligencia, +30 XP','ev-action');},
+  ch:[{t:'Subir a la superficie',nx:'c2s1'}]},
+ {id:'c1_cb1',title:'El Custodio',isCombat:1,text:'El guardián de la Cámara de Marcas. Elimina a los Portadores débiles.',enemy:{name:'El Custodio',ico:'🧙',marca:'Realidad',hp:70,lv:1},onWin:'c1_cb1w',xp:40},
+ {id:'c1_cb1w',
+  text:'<p>El Custodio cae. Entre sus cosas: una lista de nombres. El tuyo no aparece — hay espacio para uno más. "<em>Eres el primero que llega usando la cabeza además de la fuerza.</em>"</p>',
+  on:function(p){giveXP(p,40);G.flags.custodioVencido=1;},
+  ch:[{t:'Seguir hacia el pasillo',nx:'c1s6'}]},
+]},
+
+{id:2,title:'Capítulo II — La Primera Misión',loc:'erathos',scenes:[
+ {id:'c2s1',
+  text:'<p>La trampilla se abre. <strong>Aldea Erathos</strong> — pequeña, amurallada, con aspecto de llevar décadas sobreviviendo algo que no debería sobrevivirse. En el cielo hay una anomalía visible: un <strong>destello azul imposible</strong>, estático. Todos en la aldea lo ignoran con demasiada calma.</p>',
+  narr:'El mundo exterior. Por primera vez. Y ya hay problemas.',
+  ch:[{t:'Preguntar en la aldea sobre la anomalía',fx:'+Información',nx:'c2s2'},{t:'Ir directamente hacia la anomalía',fx:'Acción inmediata',nx:'c2s4'},{t:'Observar la aldea antes de actuar',fx:'+Inteligencia',nx:'c2s3'}]},
+ {id:'c2s2',
+  text:'<p>El tabernero limpia un vaso con energía innecesaria. "<em>La anomalía lleva tres días. Los Portadores que fueron a investigarla no volvieron.</em>" Pausa. "<em>¿Y tú qué eres?</em>"</p>',
+  ch:[{t:'"Soy quien va a cerrar esa anomalía"',fx:'+Reputación',nx:'c2s5'},{t:'"Solo paso por aquí. Cuéntame más."',fx:'+Información clave',nx:'c2s2b'}]},
+ {id:'c2s2b',
+  text:'<p>El tabernero baja la voz. "<em>Lo que nadie dice: la anomalía apareció cuando un mensajero del Rey Demonio cruzó aquí hace una semana. Nadie lo detuvo. Nadie se atrevió.</em>"</p>',
+  on:function(p){G.flags.mensajeroVrakar=1;giveXP(p,25);log('Información: mensajero de Vrakar','ev-special');},
+  ch:[{t:'Ir a la anomalía con esta información',nx:'c2s4'},{t:'Buscar al alcalde primero',nx:'c2s6'}]},
+ {id:'c2s3',
+  text:'<p>Media hora observando. Conclusión: la aldea tiene un Portador activo (una anciana que calienta el horno con su Marca) y seis guardias que miran la anomalía cada treinta segundos con terror disimulado. Nadie va a hacer nada.</p>',
+  on:function(p){addStat(p,'intelig',1);giveXP(p,20);log('Observación: +1 Inteligencia','ev-action');},
+  ch:[{t:'Presentarte como Portador dispuesto a ayudar',nx:'c2s5'},{t:'Ir directo a la anomalía',nx:'c2s4'}]},
+ {id:'c2s4',
+  text:'<p>La anomalía de cerca es distinta. No un destello — una <strong>grieta</strong>. El aire vibra con Maná descontrolado. Algo del otro lado se mueve. No algo. <strong>Alguien</strong>.</p>',
+  ch:[{t:'Intentar comunicarte con lo que hay al otro lado',fx:'Visión de Vrakar',nx:'c2s4b'},{t:'Cerrar la grieta con tu Marca — ¡combate!',nx:'c2_cb1'},{t:'Observar el patrón antes de actuar',fx:'+XP táctica',nx:'c2s4c'}]},
+ {id:'c2s4b',
+  text:'<p>Extiendes tu Marca hacia la grieta. Un segundo de contacto — y ves: un campo de batalla. Miles de soldados de armadura negra. Una figura enorme con corona de hueso observa desde una colina.</p><p>El contacto se rompe. La imagen quedó grabada para siempre.</p>',
+  on:function(p){G.flags.vioVrakar=1;giveXP(p,35);log('Viste al Rey Demonio a través de la grieta','ev-special');},
+  ch:[{t:'Cerrar la grieta ahora — combate',nx:'c2_cb1'}]},
+ {id:'c2s4c',
+  text:'<p>El patrón no es aleatorio. La grieta pulsa cada noventa segundos e intenta cruzar algo desde el otro lado. Aún no logra pasar del todo. Es cuestión de tiempo.</p>',
+  on:function(p){giveXP(p,25);},
+  ch:[{t:'Atacar en el momento exacto del pulso',fx:'Ventaja táctica',nx:'c2_cb1'}]},
+ {id:'c2s5',
+  text:'<p>El alcalde — un hombre con más medallones de autoridad que decisiones tomadas — te escucha con la cara de quien rezaba para que apareciera este momento. "<em>Si cierras la anomalía, la aldea te debe recursos, información y un lugar seguro.</em>"</p>',
+  on:function(p){G.flags.aldea=1;},
+  ch:[{t:'Aceptar y ir a la anomalía',nx:'c2s4'},{t:'Pedir información sobre Vrakar primero',fx:'+Contexto crítico',nx:'c2s6'}]},
+ {id:'c2s6',
+  text:'<p>El alcalde cierra la puerta. "<em>Vrakar lleva tres generaciones enviando exploradores antes de cada invasión. Esta vez dejan anomalías. Las anomalías son puntos de entrada. Si no se cierran...</em>" No termina la frase. No hace falta.</p>',
+  on:function(p){G.flags.loreVrakar=1;giveXP(p,30);log('Comprendiste la estrategia de Vrakar','ev-special');},
+  ch:[{t:'Ir a cerrar la anomalía',nx:'c2_cb1'}]},
+ {id:'c2_cb1',title:'Guardián de la Grieta',isCombat:1,text:'Una entidad demoníaca que mantiene abierta la grieta. Su derrota la cerrará.',enemy:{name:'Guardián Demoníaco',ico:'👹',marca:'Vacío',hp:90,lv:2},onWin:'c2_cb1w',xp:55},
+ {id:'c2_cb1w',
+  text:'<p>La entidad cae. La grieta tiembla, pierde forma y con un sonido como cristal rompiéndose hacia adentro, <strong>se cierra</strong>. El cielo sobre Erathos vuelve a ser negro y lleno de estrellas ordinarias. En la aldea hay aplausos que nadie sabe cómo empezaron.</p>',
+  on:function(p){G.flags.grietaCerrada=1;giveXP(p,55);if(G.flags.aldea)log('Erathos está en deuda contigo','ev-success');},
+  ch:[{t:'Avanzar hacia el norte — Capítulo III',nx:'c3s1'}]},
+]},
+
+{id:3,title:'Capítulo III — La Anomalía Oscura',loc:'bosque',scenes:[
+ {id:'c3s1',
+  text:'<p>El <strong>Bosque Oscuro</strong> — árboles que crecen hacia adentro, Maná ambiental podrido. Portadores que entraron no salieron. Los que salieron no hablan de ello.</p><p>Hay informes de una anomalía diferente en su interior. No una grieta. Un <em>agujero</em>.</p>',
+  narr:'El bosque respira. Y no es metáfora.',
+  ch:[{t:'Entrar con precaución extrema',fx:'Más seguro',nx:'c3s2'},{t:'Entrar rápido — que no tengan tiempo de prepararse',fx:'Velocidad',nx:'c3s3'},{t:'Buscar información local primero',fx:'+Intel',nx:'c3s1b'}]},
+ {id:'c3s1b',
+  text:'<p>Un cazador de los alrededores, a cambio de tres monedas: "<em>El bosque cambió hace un mes. Los animales salen en lugar de entrar. Los árboles están... atentos. En el centro hay una torre. Los demonios la usan como avanzada.</em>"</p>',
+  on:function(p){G.flags.sabeFortaleza=1;giveXP(p,20);},
+  ch:[{t:'Entrar al bosque',nx:'c3s2'}]},
+ {id:'c3s2',
+  text:'<p>El bosque tiene su propio idioma. Crujidos que no son viento. Sombras que se mueven contra la luz. A la media hora: dos Portadores caídos, sus Marcas extintas — <strong>absorbidas</strong>. Esto no es una anomalía ordinaria. Es una trampa.</p>',
+  ch:[{t:'Seguir hacia el centro con más cuidado',nx:'c3s4'},{t:'Retroceder y replanificar',fx:'Más seguro',nx:'c3s2b'}]},
+ {id:'c3s2b',
+  text:'<p>Retrocedes al borde. Si Kael es tu aliado, aparece detrás. "<em>Vi lo mismo. Hay algo que se alimenta de Marcas. Un plan es mejor que valor ciego.</em>"</p>',
+  on:function(p){if(G.flags.kaelAlly){giveXP(p,20);log('Kael: información sobre el bosque','ev-special');}},
+  ch:[{t:'Entrar con plan: atacar rápido y salir',nx:'c3_cb1'},{t:'Buscar otro camino hacia la torre',nx:'c3s3'}]},
+ {id:'c3s3',
+  text:'<p>Tu velocidad te da ventaja. Cruzas el bosque antes de que las sombras se organicen. En el centro: una <strong>torre de piedra oscura</strong> con el símbolo de Vrakar grabado. Hay un Portador prisionero dentro. Vivo. Apenas.</p>',
+  ch:[{t:'Entrar a rescatarlo — combate interior',nx:'c3_cb1'},{t:'Liberar los cerrojos desde afuera',fx:'Más cauteloso',nx:'c3s5'}]},
+ {id:'c3s4',
+  text:'<p>En el corazón del bosque: la torre. Y saliendo de ella, una figura que no es humana pero tampoco completamente demonio. Un <strong>Médium Corrupto</strong> — un Portador que vendió su Marca a Vrakar.</p><p>"<em>Otro que viene a morir</em>", dice con voz doble.</p>',
+  ch:[{t:'Atacar antes de que siga hablando',fx:'Iniciativa',nx:'c3_cb1'},{t:'Intentar razonar con lo que queda de humano',nx:'c3s4b'}]},
+ {id:'c3s4b',
+  text:'<p>Por un segundo hay duda en sus ojos dobles. El humano dentro lucha contra el demonio. Luego pierde. "<em>No hay vuelta...</em>" Ataca.</p>',
+  ch:[{t:'Combate — no hay otra opción',nx:'c3_cb1'}]},
+ {id:'c3s5',
+  text:'<p>Los cerrojos ceden. Una Portadora joven con Marca de Expansión casi extinta sale a gatas. "<em>Hay un Médium Corrupto adentro. Puede absorber Marcas.</em>"</p>',
+  on:function(p){G.flags.portadoraRescatada=1;p.mana=Math.min(p.mana+10,p.manaMax);log('Portadora rescatada: +10 Maná','ev-success');UI.update();},
+  ch:[{t:'Enfrentarte al Médium Corrupto',nx:'c3_cb1'}]},
+ {id:'c3_cb1',title:'Médium Corrupto',isCombat:1,text:'Un Portador que entregó su alma a Vrakar. Absorbe parte del daño de las habilidades.',enemy:{name:'Médium Corrupto',ico:'🧟',marca:'Vacío',hp:115,lv:3},onWin:'c3_cb1w',xp:70},
+ {id:'c3_cb1w',
+  text:'<p>El Médium Corrupto se disuelve. En la torre encuentras <strong>mapas</strong>. Vrakar tiene marcadas doce aldeas para anomalías similares. Un objetivo mayor: <em>La Torre de los Sabios</em>.</p>',
+  on:function(p){G.flags.tieneMapas=1;giveXP(p,70);log('Mapas de Vrakar obtenidos — avance clave','ev-special');},
+  ch:[{t:'Ir a la Torre de los Sabios — Capítulo IV',nx:'c4s1'}]},
+]},
+
+{id:4,title:'Capítulo IV — El Ejército de Vrakar',loc:'torre',scenes:[
+ {id:'c4s1',
+  text:'<p>La <strong>Torre de los Sabios</strong> — el centro de poder de Paralex. Cuatro Sabios que llevan décadas estudiando el Maná. Uno sale a recibirte. "<em>Sabíamos que vendrías. Llevamos días viendo señales.</em>"</p>',
+  narr:'Hay personas que esperan a los héroes. Este Sabio te esperaba a ti específicamente.',
+  ch:[{t:'"¿Cómo sabían de mí?"',fx:'+Lore fundamental',nx:'c4s2'},{t:'Mostrar los mapas directamente',fx:'Acción directa',nx:'c4s3'},{t:'"¿Cuánto tiempo tenemos antes de que Vrakar ataque?"',nx:'c4s4'}]},
+ {id:'c4s2',
+  text:'<p>"<em>Eres un Renacido. Alguien de otro mundo traído aquí con propósito.</em>" El Sabio señala una esfera de cristal con tu imagen dentro — desde hace décadas. "<em>Este momento estaba escrito. No en el destino — en el Maná mismo.</em>"</p>',
+  on:function(p){G.flags.sabeRenacido=1;giveXP(p,30);},
+  ch:[{t:'Aceptar este rol — detendrás a Vrakar',fx:'+Motivación',nx:'c4s3'},{t:'"No creo en el destino" — independencia',nx:'c4s3'}]},
+ {id:'c4s3',
+  text:'<p>Los Sabios examinan los mapas con urgencia creciente. "<em>Doce puntos de anomalía activos. Vrakar construye una red. Cuando se complete, será como abrir todas las puertas de su reino al mismo tiempo.</em>"</p><p>"<em>Necesitamos cerrar al menos ocho. Tú no puedes ir a todos.</em>"</p>',
+  ch:[{t:'Pedir refuerzos — reunir Portadores',fx:'+Ejército aliado',nx:'c4s5'},{t:'"Puedo hacerlo solo — dadme lo que necesito"',fx:'Solitario pero rápido',nx:'c4s5b'},{t:'Preguntar primero sobre la debilidad de Vrakar',fx:'+Info crítica',nx:'c4s4'}]},
+ {id:'c4s4',
+  text:'<p>"<em>Vrakar no es invencible.</em>" El Sabio mayor abre un libro interminable. "<em>Tiene tres capas de protección: su ejército, sus generales, y su Corona de Maná Oscuro. Destruir la Corona lo debilita suficiente para vencerlo.</em>"</p><p>"<em>La Corona solo puede fracturarse con una Marca Primordial en resonancia plena.</em>" Te mira. "<em>Como la tuya.</em>"</p>',
+  on:function(p){G.flags.sabeDebilidad=1;giveXP(p,40);log('Conoces la debilidad de Vrakar','ev-special');},
+  ch:[{t:'Prepararse para el enfrentamiento final',nx:'c4s5'}]},
+ {id:'c4s5',
+  text:'<p>Los Sabios activan su red de contactos. En dos días llegan ocho Portadores más. El plan: cerrar los puntos de anomalía simultáneamente mientras tú vas directamente a la Frontera Demoníaca.</p>',
+  on:function(p){G.flags.ejercito=1;giveXP(p,50);log('Has reunido aliados para la batalla final','ev-special');},
+  ch:[{t:'Marchar hacia la Frontera Demoníaca — Cap. V',nx:'c5s1'}]},
+ {id:'c4s5b',
+  text:'<p>Los Sabios te entregan tres artefactos de Maná concentrado — cristales que amplifican una Marca durante el combate.</p>',
+  on:function(p){p.manaMax+=30;p.mana=Math.min(p.mana+30,p.manaMax);giveXP(p,30);FX.mana(p.marca);log('Cristales de Maná: ManaMax +30','ev-success');UI.update();},
+  ch:[{t:'Ir solo hacia la Frontera',nx:'c5s1'}]},
+ {id:'c4_cb1',title:'General Krath',isCombat:1,text:'Uno de los generales del ejército demoníaco llegó a la Torre. Los Sabios necesitan tiempo.',enemy:{name:'General Demoníaco Krath',ico:'👿',marca:'Vacío',hp:145,lv:4},onWin:'c4_cb1w',xp:90},
+ {id:'c4_cb1w',
+  text:'<p>El General cae. Los Sabios completan el ritual que necesitaban. "<em>Ahora tenemos una ventana de dos días. Después el ejército de Vrakar llegará en masa.</em>"</p>',
+  on:function(p){giveXP(p,90);G.flags.generalDerrotado=1;},
+  ch:[{t:'Ir hacia la Frontera Demoníaca',nx:'c5s1'}]},
+]},
+
+{id:5,title:'Capítulo V — La Frontera Demoníaca',loc:'frontera',scenes:[
+ {id:'c5s1',
+  text:'<p>La <strong>Frontera Demoníaca</strong> — donde el mundo de Paralex termina y el reino de Vrakar comienza. Al cruzarla, el Maná ambiental se vuelve negro. Hay cadáveres de Portadores en los últimos metros del lado "seguro". Nadie ha cruzado y vuelto en décadas.</p>',
+  narr:'Esto es lo que significa punto de no retorno.',
+  ch:[{t:'Cruzar la Frontera',fx:'Sin vuelta atrás',nx:'c5s2'},{t:'Meditar — recuperar fuerzas antes de cruzar',fx:'+Maná y Vida',nx:'c5s1b'},{t:'Enviar señal a tus aliados antes de cruzar',fx:'+Apoyo',nx:'c5s1c'}]},
+ {id:'c5s1b',
+  text:'<p>Una hora de meditación profunda. La Marca pulsa al máximo. El Maná se asienta como agua quieta. Estás tan listo como puedes estar.</p>',
+  on:function(p){var rm=Math.floor(p.manaMax*.4),rv=Math.floor(p.vidaMax*.2);p.mana=Math.min(p.mana+rm,p.manaMax);p.vida=Math.min(p.vida+rv,p.vidaMax);FX.mana(p.marca);log('Meditación: Maná y Vida restaurados parcialmente','ev-success');UI.update();},
+  ch:[{t:'Cruzar la Frontera',nx:'c5s2'}]},
+ {id:'c5s1c',
+  text:'<p>La señal se envía. En algún lugar detrás, tus aliados saben que cruzaste. No es consuelo. Pero tampoco es insignificante.</p>',
+  on:function(p){G.flags.alianzaActiva=1;giveXP(p,25);},
+  ch:[{t:'Cruzar la Frontera',nx:'c5s2'}]},
+ {id:'c5s2',
+  text:'<p>Al otro lado todo cambia. El cielo es rojo. La tierra cruje con pasos que no son tuyos. El Maná aquí es hambriento. Hay soldados — cientos — mirando hacia el horizonte. Todavía no hacia ti.</p>',
+  ch:[{t:'Infiltrarte usando tu Marca',fx:'+Velocidad, riesgo',nx:'c5s3'},{t:'Combatir a los que están más cerca',nx:'c5_cb1'},{t:'Buscar camino alternativo hacia la Ciudadela',fx:'+Sigilo',nx:'c5s4'}]},
+ {id:'c5s3',
+  text:'<p>Tu Marca modifica tu apariencia — no completamente, pero suficiente. Llegas a la base de la <strong>Ciudadela de Vrakar</strong>. Desde aquí puedes escuchar su voz dando órdenes.</p>',
+  on:function(p){giveXP(p,40);G.flags.ciudadela=1;},
+  ch:[{t:'Infiltrarte dentro de la Ciudadela',nx:'c6s1'}]},
+ {id:'c5s4',
+  text:'<p>Un camino de roca que rodea el campamento. Difícil, lento, invisible. Llegas sin combate — con más energía pero sin información del interior.</p>',
+  on:function(p){giveXP(p,30);G.flags.ciudadela=1;},
+  ch:[{t:'Entrar a la Ciudadela',nx:'c6s1'}]},
+ {id:'c5_cb1',title:'Capitán Demoníaco',isCombat:1,text:'El capitán que comanda este sector del ejército de Vrakar. Fuerte, sin misericordia.',enemy:{name:'Capitán Demoníaco',ico:'⚔️',marca:'Energía',hp:165,lv:5},onWin:'c5_cb1w',xp:110},
+ {id:'c5_cb1w',
+  text:'<p>El Capitán cae. El sector pierde dirección temporalmente. Una ventana de caos que puedes usar para avanzar.</p>',
+  on:function(p){giveXP(p,110);G.flags.ciudadela=1;},
+  ch:[{t:'Usar el caos para entrar a la Ciudadela',nx:'c6s1'}]},
+]},
+
+{id:6,title:'Capítulo VI — El Rey Demonio',loc:'ciudadela',scenes:[
+ {id:'c6s1',
+  text:'<p>La <strong>Ciudadela de Vrakar</strong> por dentro es como una ciudad construida al revés. Las torres crecen hacia abajo. La luz viene de abajo. Los pasillos se tuercen en maneras que no respetan la geometría.</p><p>En el centro: un trono de Maná oscuro comprimido. Sobre él, <strong>Vrakar</strong>. Más grande de lo esperado. Más quieto también. Te estaba esperando.</p>',
+  narr:'Este es el momento. Todo lo que hiciste desde la Cámara de Marcas llevó aquí.',
+  ch:[{t:'"He venido a terminar esto"',fx:'Enfrentamiento directo',nx:'c6s2'},{t:'Buscar la Corona de Maná Oscuro antes de hablar',nx:'c6s3'},{t:'"¿Por qué haces esto?" — intentar entender',fx:'+Lore final',nx:'c6s2b'}]},
+ {id:'c6s2',
+  text:'<p>Vrakar se levanta del trono. Su Corona de Maná Oscuro pulsa con intensidad que hace doler tu Marca.</p><p>"<em>Un Renacido.</em>" Su voz hace vibrar el suelo. "<em>Interesante. ¿Un alma de otro mundo puede pertenecer realmente a este?</em>"</p><p>Levanta la mano. "<em>Supongo que lo averiguaremos.</em>"</p>',
+  ch:[{t:'¡Atacar mientras aún habla!',fx:'Ventaja',nx:'c6_final'},{t:'Esperar — su movimiento revelará algo',nx:'c6_final'}]},
+ {id:'c6s2b',
+  text:'<p>"<em>¿Por qué?</em>" Vrakar suena casi divertido. "<em>El Maná de este mundo siempre fue del Vacío. Los Portadores son parásitos. Y tú el más curioso — viniste de otro mundo para robarme lo que es mío.</em>"</p><p>Hay lógica en su locura. Eso lo hace más peligroso.</p>',
+  on:function(p){G.flags.entendioVrakar=1;giveXP(p,30);},
+  ch:[{t:'Atacar — entender no es perdonar',nx:'c6_final'}]},
+ {id:'c6s3',
+  text:'<p>La Corona flota sobre Vrakar. Hay un patrón: cuando habla, se acerca más a él; cuando se mueve, se aleja. Si atacas la Corona directamente con tu Marca en resonancia plena...</p>',
+  on:function(p){G.flags.patronCorona=1;giveXP(p,40);log('Conoces el patrón de la Corona','ev-special');},
+  ch:[{t:'Ejecutar el plan — atacar la Corona',fx:'+Ventaja táctica en el combate final',nx:'c6_final'}]},
+ {id:'c6_final',title:'Vrakar — Rey Demonio',isCombat:1,text:'El Rey Demonio en persona. Su Corona de Maná Oscuro amplifica cada golpe. El combate definitivo.',enemy:{name:'Vrakar — Rey Demonio',ico:'👑',marca:'Vacío',hp:240,lv:6},onWin:'ending',xp:200},
+]},
+];
+
+// ╔══════════════════════════════════════════════════
+//  GAME STATE
+// ╚══════════════════════════════════════════════════
+var G={player:null,scene:null,enemy:null,turn:1,flags:{},kills:0,chReach:1,_lastCh:0};
+var CA={fuerza:1,velocidad:1,intelig:1,resisten:1,control:1};
+var PTS=50;
+
+// ╔══════════════════════════════════════════════════
+//  HELPERS
+// ╚══════════════════════════════════════════════════
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function cl(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+function pk(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function $(id){return document.getElementById(id);}
+function set(id,v){var e=$(id);if(e)e.textContent=v;}
+function pct(v,mx){return Math.max(0,Math.min(100,mx>0?v/mx*100:0))+'%';}
+function log(msg,cls){var el=$('evLog');if(!el)return;var d=document.createElement('div');d.className='ev '+(cls||'ev-info');d.textContent=msg;el.insertBefore(d,el.firstChild);while(el.children.length>60)el.removeChild(el.lastChild);}
+function clog(msg,cls){var el=$('cLog');if(!el)return;var d=document.createElement('div');d.className='cl '+(cls||'cl-act');d.textContent=msg;el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function addStat(p,k,v){p.attrs[k]=cl((p.attrs[k]||0)+v,0,100);}
+
+function genPlayer(name,attrs,marca,manaLv){
+  var ml=MANA_LVL.find(function(m){return m.id===manaLv;})||MANA_LVL[1];
+  var base={vida:100+ml.bonus.hp,mana:60+ml.bonus.mp};
+  var p={
+    name:name,marca:marca,manaLv:manaLv,level:1,xp:0,xpMax:100,kills:0,
+    vida:base.vida,vidaMax:base.vida,mana:base.mana,manaMax:base.mana,
+    attrs:JSON.parse(JSON.stringify(attrs)),
+    statusEffects:[],anchored:0,defending:0,
+    manaBonus:ml.bonus.mp,hpow:ml.id==='alto'?1.15:ml.id==='medio'?1.0:.9
+  };
+  return p;
+}
+
+function giveXP(p,amt){
+  if(!p)return;
+  p.xp+=amt;FX.xpGain(amt);
+  log('+'+amt+' XP','ev-success');
+  while(p.xp>=p.xpMax){
+    p.xp-=p.xpMax;p.xpMax=Math.floor(p.xpMax*1.35+40);p.level++;
+    var hb=20+p.level*8,mb=12+p.level*5;
+    p.vidaMax+=hb;p.vida=Math.min(p.vida+hb,p.vidaMax);
+    p.manaMax+=mb;p.mana=Math.min(p.mana+mb,p.manaMax);
+    SFX.levelUp();FX.lvUp();
+    log('¡Nivel '+p.level+'! Vida Max +'+hb+', Maná Max +'+mb,'ev-special');
+    openLvUp(p);
+  }
+  UI.update();
+}
+
+function openLvUp(p){
+  var ov=$('ovLvUp');if(!ov)return;
+  $('ovSub').textContent='Nivel '+p.level+' alcanzado. Vida Max y Maná Max aumentados. Elige un atributo para mejorar:';
+  var list=$('ovList');list.innerHTML='';
+  ADEFS.forEach(function(a){
+    var cur=p.attrs[a.k]||0;
+    if(cur>=100)return;
+    var b=document.createElement('button');b.className='ov-btn';
+    b.innerHTML=a.i+' <strong style="margin-left:4px;color:var(--gold2)">'+a.n+'</strong><span style="margin-left:auto;color:var(--dim);font-size:12px">'+cur+' → '+(cur+3)+'</span>';
+    b.onclick=function(){addStat(p,a.k,3);log(a.n+' +3 (subida de nivel)','ev-success');ov.classList.remove('open');UI.update();};
+    list.appendChild(b);
+  });
+  ov.classList.add('open');
+}
+
+// ╔══════════════════════════════════════════════════
+//  NAV
+// ╚══════════════════════════════════════════════════
+var Nav={
+  go:function(id){
+    var cur=document.querySelector('.screen.on'),next=$(id);if(!next)return;
+    if(id!=='game')Profile.close();
+    if(cur&&cur!==next){
+      cur.style.transition='opacity .3s ease';cur.style.opacity='0';
+      setTimeout(function(){cur.classList.remove('on');cur.style.opacity='';cur.style.transition='';next.classList.add('on');next.style.opacity='0';next.style.transition='opacity .4s ease';setTimeout(function(){next.style.opacity='1';},20);setTimeout(function(){next.style.transition='';next.style.opacity='';},450);},300);
+    }else{next.classList.add('on');}
+    window.scrollTo(0,0);
+    if(id==='intro'||id==='create')BGM.play('menu');
+    else if(id==='gameover')BGM.play('gameover');
+  }
+};
+
+// ╔══════════════════════════════════════════════════
+//  ATTR BUILDER (Create screen)
+// ╚══════════════════════════════════════════════════
+function buildAttrUI(){
+  var grid=$('attrGrid');if(!grid)return;grid.innerHTML='';
+  ADEFS.forEach(function(a){
+    var row=document.createElement('div');row.className='attr-row';
+    row.innerHTML='<span class="attr-ico">'+a.i+'</span><span class="attr-name" title="'+a.d+'">'+a.n+'</span><div class="attr-track"><div class="attr-fill" id="af_'+a.k+'" style="width:'+pct(CA[a.k]||1,100)+'"></div></div><div class="attr-ctrl"><button class="abtn" onclick="adjAttr(\''+a.k+'\',-1)">−</button><span class="aval" id="av_'+a.k+'">'+(CA[a.k]||1)+'</span><button class="abtn" onclick="adjAttr(\''+a.k+'\',1)">+</button></div>';
+    grid.appendChild(row);
+  });
+  updatePts();
+}
+function adjAttr(k,d){
+  var cur=CA[k]||1,nv=cur+d;
+  if(nv<1||nv>100)return;
+  if(d>0&&PTS<=0)return;
+  CA[k]=nv;PTS-=d;
+  var avEl=$('av_'+k),afEl=$('af_'+k);
+  if(avEl){avEl.textContent=nv;avEl.classList.remove('pop');void avEl.offsetWidth;avEl.classList.add('pop');}
+  if(afEl)afEl.style.width=pct(nv,100);
+  updatePts();SFX.btn();
+}
+function updatePts(){
+  var el=$('ptsLeft'),badge=$('ptsBadge');
+  if(el)el.textContent=PTS;
+  if(badge){
+    badge.classList.toggle('warn', PTS>0);
+    badge.classList.toggle('done', PTS===0);
+    badge.innerHTML=PTS===0
+      ? '✓ Puntos repartidos'
+      : 'Puntos restantes: <span id="ptsLeft">'+PTS+'</span>';
+  }
+}
+
+// ╔══════════════════════════════════════════════════
+//  MAP
+// ╚══════════════════════════════════════════════════
+function buildMap(currentChapter){
+  var map=$('worldMap');if(!map)return;
+  map.querySelectorAll('.mr').forEach(function(e){e.remove();});
+  MAP_REG.forEach(function(r){
+    var div=document.createElement('div');
+    div.className='mr'+(currentChapter>=r.ch?' ':(r.ch===currentChapter+1?'':' locked'));
+    if(r.ch===currentChapter)div.classList.add('cur');
+    if(r.ch>currentChapter+1)div.classList.add('locked');
+    div.style.cssText='left:'+r.x+'%;top:'+r.y+'%;transform:translate(-50%,-50%)';
+    var nameLines=r.n.split('\n');
+    div.innerHTML='<div class="mr-dot" style="background:'+r.col+';color:'+r.col+'"></div><div class="mr-name">'+nameLines.join('<br>')+'</div>';
+    map.appendChild(div);
+  });
+  var cur=MAP_REG.find(function(r){return r.ch===currentChapter;});
+  if(cur)$('mapLoc')&&($('mapLoc').textContent='Ubicación: '+cur.n.replace('\n',' '));
+}
+
+// ╔══════════════════════════════════════════════════
+//  UI
+// ╚══════════════════════════════════════════════════
+var UI={
+  pct:function(v,mx){return pct(v,mx);},
+  tags:function(id,tags){
+    var el=$(id);if(!el)return;el.innerHTML='';
+    var hasAny=false;
+    (tags||[]).forEach(function(t){
+      hasAny=true;
+      var s=document.createElement('span');
+      var cls='stag';
+      if(t.tp==='slow')cls+=' stag-slow';else if(t.tp==='dark')cls+=' stag-dark';
+      else if(t.tp==='null')cls+=' stag-null';else if(t.tp==='shield'||t.tp==='bless')cls+=' stag-shield';
+      else if(t.tp==='burn')cls+=' stag-burn';else if(t.tp==='curse')cls+=' stag-curse';
+      s.className=cls;s.textContent=t.lb+'('+t.tu+')';el.appendChild(s);
+    });
+    if(id==='gTags'){var none=$('gTagNone');if(none)none.style.display=hasAny?'none':'';}
+  },
+  attrs:function(p){
+    var b=$('gAttrs');if(!b)return;b.innerHTML='';
+    ADEFS.forEach(function(a){
+      var row=document.createElement('div');row.className='ma';
+      row.innerHTML='<span class="ma-n">'+a.i+' '+a.n+'</span><span class="ma-v">'+(p.attrs[a.k]||0)+'</span>';
+      b.appendChild(row);
+    });
+  },
+  skills:function(p){
+    var b=$('gSkills'),lbl=$('skLabel');if(!b)return;b.innerHTML='';
+    if(!p.marca||p.marca==='Nulo'){if(lbl)lbl.textContent='Habilidades';return;}
+    var inC=$('secCombat').style.display!=='none';
+    if(lbl)lbl.textContent=inC?'Habilidades (combate)':'Habilidades';
+    (SKILLS[p.marca]||[]).forEach(function(sk){
+      var off=p.mana<sk.cost||!inC;
+      var b2=document.createElement('button');b2.className='sk-btn'+(off?' sk-off':'');
+      b2.innerHTML='<span class="sk-ico">'+sk.i+'</span><div><div class="sk-nm">'+sk.n+'</div><div class="sk-cost">'+sk.cost+' ◈</div></div>';
+      if(!off)b2.onclick=(function(s){return function(){Combat.skill(s);};})(sk);
+      b.appendChild(b2);
+    });
+  },
+  update:function(){
+    var p=G.player;if(!p)return;
+
+    // ── HUD Topbar ──
+    // Icono y nombre
+    var ico=MICONS[p.marca]||'⧖';
+    set('hudMarcaIco',ico);set('hudName',p.name);set('hudLv',p.level);
+    set('hudMarcaTag','Marca de '+p.marca);
+    var chtEl=$('hudChTag');if(chtEl)chtEl.textContent='Cap. '+toRoman(G.chReach||1);
+    // Vida
+    var vv=Math.max(0,p.vida),vp=pct(cl(vv,0,p.vidaMax),p.vidaMax);
+    bumpVal('hudV',vv);set('hudVmax',p.vidaMax);
+    var hbv=$('hudBV');if(hbv){hbv.style.width=vp;hbv.className='hud-fill hf-v'+(p.vida/p.vidaMax<.3?' crit':'');}
+    // Maná
+    var mv=Math.max(0,p.mana),mp=pct(cl(mv,0,p.manaMax),p.manaMax);
+    bumpVal('hudM',mv);set('hudMmax',p.manaMax);
+    var hbm=$('hudBM');if(hbm){hbm.style.width=mp;hbm.className='hud-fill hf-m'+(p.mana/p.manaMax<.25?' low':'');}
+    // XP
+    set('hudXP',p.xp);set('hudXPmax',p.xpMax);
+    var hbx=$('hudBX');if(hbx)hbx.style.width=pct(p.xp,p.xpMax);
+
+    // ── Bars legacy (panel izquierdo oculto, se mantienen por compatibilidad) ──
+    set('gV',vv);set('gVmax',p.vidaMax);set('gM',mv);set('gMmax',p.manaMax);
+    set('gXP',p.xp);set('gXPmax',p.xpMax);set('gLv',p.level);
+    var bvL=$('bV');if(bvL){bvL.style.width=vp;bvL.className='bar-fill bv'+(p.vida/p.vidaMax<.3?' crit':'');}
+    var bmL=$('bM');if(bmL){bmL.style.width=mp;bmL.className='bar-fill bm'+(p.mana/p.manaMax<.25?' low':'');}
+    var bxL=$('bX');if(bxL)bxL.style.width=pct(p.xp,p.xpMax);
+
+    // ── Panel de perfil (si está abierto, actualizar en vivo) ──
+    if($('profilePanel').classList.contains('open'))Profile.populate(p);
+
+    // ── Combate ──
+    if(G.enemy){
+      set('cEv',Math.max(0,G.enemy.vida));set('cEvmax',G.enemy.vidaMax);
+      var be=$('bE');if(be)be.style.width=pct(cl(G.enemy.vida,0,G.enemy.vidaMax),G.enemy.vidaMax);
+      set('cTurn',G.turn);this.tags('cEtags',G.enemy.statusEffects||[]);
+    }
+    this.attrs(p);this.tags('gTags',p.statusEffects||[]);this.skills(p);
+  }
+};
+
+// ╔══════════════════════════════════════════════════
+//  PROFILE PANEL
+// ╚══════════════════════════════════════════════════
+function bumpVal(id,v){var e=$(id);if(!e)return;if(e.textContent!=String(v)){e.textContent=v;e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump');}}
+
+var Profile={
+  _open:false,
+  toggle:function(){this._open?this.close():this.open();},
+  open:function(){
+    var p=G.player;if(!p)return;
+    SFX.btn();
+    this._open=true;
+    var panel=$('profilePanel'),bd=$('profileBackdrop');
+    panel.classList.remove('closing');
+    panel.classList.add('open');
+    bd.classList.add('open');
+    var ico=$('ppIco');
+    if(ico){ico.classList.remove('spinning');void ico.offsetWidth;ico.classList.add('spinning');}
+    var burst=$('ppRingBurst');
+    if(burst){burst.classList.remove('pop');void burst.offsetWidth;burst.classList.add('pop');}
+    this.populate(p);
+    // Actualizar sección cloud
+    if(typeof Cloud!=='undefined'){Cloud.updateUI();Cloud.renderBtns();}
+  },
+  close:function(){
+    if(!this._open)return;
+    this._open=false;
+    var panel=$('profilePanel'),bd=$('profileBackdrop');
+    panel.classList.add('closing');
+    bd.classList.remove('open');
+    setTimeout(function(){panel.classList.remove('open','closing');},260);
+  },
+  populate:function(p){
+    if(!p)return;
+    var ico=MICONS[p.marca]||'⧖';
+    // Cabecera
+    set('ppIco',ico);
+    set('ppMarcaNm','Marca de '+p.marca);
+    set('ppMarcaDesc',MDESC[p.marca]||'');
+    // Stats rápidos
+    set('ppName',p.name);set('ppLv',p.level);
+    var mlMap={bajo:'Bajo',medio:'Med.',alto:'Alto'};
+    var mlEl=$('ppManaLv');
+    if(mlEl){mlEl.textContent=mlMap[p.manaLv]||'—';mlEl.className='pp-stat-val'+(p.manaLv==='alto'?' c-violet':p.manaLv==='medio'?' c-blue':'');}
+    // Barras
+    var vv=Math.max(0,p.vida),mv=Math.max(0,p.mana);
+    var vp=pct(cl(p.vida,0,p.vidaMax),p.vidaMax);
+    var mp2=pct(cl(p.mana,0,p.manaMax),p.manaMax);
+    var xp2=pct(p.xp,p.xpMax);
+    set('ppVida',vv);set('ppVidaMax',p.vidaMax);
+    set('ppMana',mv);set('ppManaMax',p.manaMax);
+    set('ppXP',p.xp);set('ppXPmax',p.xpMax);
+    var bv=$('ppBV');if(bv){bv.style.width=vp;bv.className='pp-fill pf-v'+(p.vida/p.vidaMax<.3?' crit':'');}
+    var bm=$('ppBM');if(bm){bm.style.width=mp2;bm.className='pp-fill pf-m'+(p.mana/p.manaMax<.25?' low':'');}
+    var bx=$('ppBX');if(bx)bx.style.width=xp2;
+    // Atributos — sin barra de progreso, solo icono+nombre+valor
+    var ab=$('ppAttrs');if(ab){ab.innerHTML='';
+      ADEFS.forEach(function(a){
+        var val=p.attrs[a.k]||0;
+        var row=document.createElement('div');row.className='pp-attr';
+        row.innerHTML='<span class="pp-attr-ico">'+a.i+'</span>'
+          +'<span class="pp-attr-name">'+a.n+'</span>'
+          +'<span class="pp-attr-val">'+val+'</span>';
+        ab.appendChild(row);
+      });
+    }
+    // Estado
+    var tags=p.statusEffects||[];var pt=$('ppTags'),pnf=$('ppNoFx');
+    if(pt){pt.innerHTML='';tags.forEach(function(t){
+      var s=document.createElement('span');
+      var cls='stag';
+      if(t.tp==='slow')cls+=' stag-slow';else if(t.tp==='dark')cls+=' stag-dark';
+      else if(t.tp==='null')cls+=' stag-null';else if(t.tp==='shield'||t.tp==='bless')cls+=' stag-shield';
+      else if(t.tp==='burn')cls+=' stag-burn';else if(t.tp==='curse')cls+=' stag-curse';
+      s.className=cls;s.textContent=t.lb+'('+t.tu+')';pt.appendChild(s);
+    });}
+    if(pnf)pnf.style.display=tags.length?'none':'';
+  }
+};
+
+// ╔══════════════════════════════════════════════════
+//  CHAPTER NAV
+// ╚══════════════════════════════════════════════════
+function buildChNav(){
+  var nav=$('chNav');if(!nav)return;nav.innerHTML='';
+  CHAPTERS.forEach(function(ch){
+    var tab=document.createElement('button');
+    var isActive=ch.id===G.chReach,isDone=ch.id<G.chReach,isLocked=ch.id>G.chReach;
+    tab.className='ch-tab'+(isActive?' ch-active':isDone?' ch-done':' ch-locked');
+    tab.innerHTML='<span class="ch-tab-dot"></span>Cap. '+toRoman(ch.id);
+    tab.title=ch.title;
+    if(!isLocked){
+      tab.onclick=function(){
+        if(isActive&&G.scene){Story.loadScene(G.scene.id);}
+        else if(isDone){var s=ch.scenes[0];if(s)Story.loadScene(s.id);}
+      };
+    }else{
+      tab.setAttribute('disabled','');
+    }
+    nav.appendChild(tab);
+  });
+  // Scroll al tab activo
+  var active=nav.querySelector('.ch-active');
+  if(active)setTimeout(function(){active.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});},80);
+}
+function toRoman(n){var r=['I','II','III','IV','V','VI'];return r[n-1]||n;}
+
+// ╔══════════════════════════════════════════════════
+//  STORY ENGINE
+// ╚══════════════════════════════════════════════════
+var Story={
+  startCreate:function(){
+    var name=$('pname').value.trim();
+    if(!name){$('pname').focus();$('pname').style.borderColor='var(--red2)';setTimeout(function(){$('pname').style.borderColor='';},1500);return;}
+    // Validar que se repartieron todos los puntos
+    if(PTS>0){
+      var badge=$('ptsBadge');
+      if(badge){badge.classList.add('warn');badge.style.animation='none';void badge.offsetWidth;badge.style.animation='popIn .35s ease';}
+      var hint=document.createElement('div');
+      hint.id='ptsHint';hint.style.cssText='color:#e07070;font-size:11px;margin-top:6px;text-align:center;animation:fadeUp .2s ease';
+      hint.textContent='⚠ Debes repartir todos los '+PTS+' puntos restantes antes de continuar.';
+      var existing=document.getElementById('ptsHint');
+      if(existing)existing.remove();
+      var attrNote=document.querySelector('.attr-note');
+      if(attrNote)attrNote.parentNode.insertBefore(hint,attrNote.nextSibling);
+      var grid=$('attrGrid');if(grid){grid.style.animation='none';void grid.offsetWidth;grid.style.animation='sceneIn .3s ease';}
+      setTimeout(function(){var h=document.getElementById('ptsHint');if(h)h.remove();},3500);
+      return;
+    }
+    document.getElementById('ptsHint')&&document.getElementById('ptsHint').remove();
+    Nav.go('awakening');
+    var marca=pk(MARCAS);
+    var mRoll=Math.random();var mLvId=mRoll>.66?'alto':mRoll>.33?'medio':'bajo';
+    var ml=MANA_LVL.find(function(m){return m.id===mLvId;});
+    G._pendingCreate={name:name,attrs:JSON.parse(JSON.stringify(CA)),marca:marca,manaLv:mLvId};
+    // Show awakening screen
+    $('awkRune').textContent=MICONS[marca]||'✦';
+    $('awkMarca').textContent=marca+' '+MICONS[marca];
+    $('awkMarcaDesc').textContent=MDESC[marca]||'';
+    $('awkManaBadge').innerHTML='<span class="mana-badge mb-'+mLvId+'">'+ml.n.toUpperCase()+'</span>';
+    $('awkManaDesc').textContent=ml.desc;
+    var p=genPlayer(name,JSON.parse(JSON.stringify(CA)),marca,mLvId);
+    $('awkStats').innerHTML='❤ Vida: <b style="color:var(--gold2)">'+p.vidaMax+'</b>  ◈ Maná: <b style="color:var(--blue2)">'+p.manaMax+'</b><br>Marcas de '+marca+' · Nivel de Maná: '+ml.n;
+    // SFX
+    setTimeout(function(){SFX.story();},400);
+    setTimeout(function(){SFX.levelUp();FX.mana(marca);},800);
+  },
+  beginGame:function(){
+    var pc=G._pendingCreate;if(!pc)return;
+    var p=genPlayer(pc.name,pc.attrs,pc.marca,pc.manaLv);
+    G.player=p;G.chReach=1;G.flags={};G.kills=0;G._lastCh=0;
+    $('gAvatar').textContent=MICONS[p.marca]||'⧖';
+    $('gName').textContent=p.name;
+    $('gMarca').textContent='Marca de '+p.marca;
+    $('gAnomaly').innerHTML='';
+    $('evLog').innerHTML='';
+    log(p.name+' ha renacido en Paralex.','ev-story');
+    log('Marca de '+p.marca+' activa.','ev-special');
+    Nav.go('game');
+    buildChNav();
+    buildMap(1);
+    $('secStory').style.display='block';$('secCombat').style.display='none';
+    BGM.play('story');SFX.chapter();
+    this.loadScene('c1s1');
+  },
+  findScene:function(id){
+    if(id==='ending')return null;
+    for(var ci=0;ci<CHAPTERS.length;ci++){
+      for(var si=0;si<CHAPTERS[ci].scenes.length;si++){
+        if(CHAPTERS[ci].scenes[si].id===id)return{sc:CHAPTERS[ci].scenes[si],ch:CHAPTERS[ci]};
+      }
+    }
+    return null;
+  },
+  loadScene:function(id){
+    if(id==='ending'){this.ending();return;}
+    if(id==='gameover'){this.gameover('Caíste en batalla.');return;}
+    var f=this.findScene(id);
+    if(!f){log('Escena "'+id+'" no encontrada','ev-danger');return;}
+    var sc=f.sc,ch=f.ch;
+    G.scene=sc;
+    if(ch.id>G.chReach){G.chReach=ch.id;buildChNav();buildMap(ch.id);}
+    if(ch.id>G._lastCh){
+      G._lastCh=ch.id;SFX.chapter();
+      log('— '+ch.title+' —','ev-story');
+      $('tbCh').textContent=ch.title;
+    }
+    if(sc.on)sc.on(G.player);
+    if(sc.isCombat&&sc.enemy){Combat.start(sc);return;}
+    $('secStory').style.display='block';$('secCombat').style.display='none';
+    BGM.play('story');
+    this.renderScene(sc,ch);
+    UI.update();SFX.story();
+  },
+  renderScene:function(sc,ch){
+    FX.scene();
+    $('sbBadge').textContent=ch.title;
+    $('sbTitle').textContent=sc.title||ch.title;
+    $('sbText').innerHTML=sc.text||'';
+    var narr=$('sbNarr');if(narr){if(sc.narr){narr.style.display='block';narr.textContent=sc.narr;}else narr.style.display='none';}
+    var list=$('choiceList');if(!list)return;list.innerHTML='';
+    var keys=['A','B','C','D','E'];
+    (sc.ch||[]).forEach(function(c,i){
+      var btn=document.createElement('button');btn.className='choice-btn';
+      btn.innerHTML='<span class="ck">'+(keys[i]||i+1)+'</span><div><div>'+c.t+'</div>'+(c.fx?'<div class="cfx">'+c.fx+'</div>':'')+'</div>';
+      btn.onclick=(function(cx){return function(){
+        SFX.choice();log('Elegiste: '+cx.t,'ev-story');Story.loadScene(cx.nx);
+      };})(c);
+      list.appendChild(btn);
+    });
+  },
+  ending:function(){
+    var p=G.player;
+    BGM.play('victory');SFX.victory();FX.victory();
+    var chTitle=document.getElementById('endTitle');if(chTitle)chTitle.textContent='Victoria — Vrakar Ha Caído';
+    var flags=G.flags;
+    var allies=[];if(flags.kaelAlly)allies.push('Kael');if(flags.aldea)allies.push('Aldea Erathos');if(flags.ejercito)allies.push('Los Ocho Portadores');
+    var et=$('endText');if(et)et.innerHTML='<p>Vrakar cae.</p><p>La Corona de Maná Oscuro se fractura — primero una grieta, luego otra, luego explota en mil fragmentos que se disuelven antes de tocar el suelo. El trono se deshace. Las paredes de la Ciudadela tiemblan.</p><p>Pero el mundo no se derrumba. El Maná de Paralex, libre de la influencia del Vacío por primera vez en décadas, <strong>respira</strong>.</p><p>Y tú, un alma renacida de otro mundo, estás de pie en el centro de todo eso. No había destino. Había decisiones. Las tuyas.</p>'+(allies.length?'<p>Aliados: <strong>'+allies.join(', ')+'</strong></p>':'');
+    var es=$('endStats');if(es)es.innerHTML='<div class="est"><div class="est-l">Nivel Final</div><div class="est-v">'+p.level+'</div></div><div class="est"><div class="est-l">Victorias</div><div class="est-v">'+G.kills+'</div></div><div class="est"><div class="est-l">Capítulos</div><div class="est-v">VI</div></div>';
+    Nav.go('ending');
+  },
+  gameover:function(reason){
+    var p=G.player||{level:1};
+    $('goSub').textContent=(reason||'Tu historia termina.')+' Capítulo '+toRoman(G.chReach)+'.';
+    $('goCh').textContent=toRoman(G.chReach);$('goLv').textContent=p.level||1;$('goKl').textContent=G.kills||0;
+    SFX.gameover();BGM.play('gameover');Nav.go('gameover');
+  },
+  restart:function(){
+    G={player:null,scene:null,enemy:null,turn:1,flags:{},kills:0,chReach:1,_lastCh:0};
+    CA={fuerza:1,velocidad:1,intelig:1,resisten:1,control:1};PTS=50;
+    var i=$('pname');if(i)i.value='';
+    buildAttrUI();BGM.play('menu');Nav.go('intro');
+    // No borrar guardado — el jugador puede continuar desde menú
+    setTimeout(function(){Menu.checkSave();},100);
+  }
+};
+
+// ╔══════════════════════════════════════════════════
+//  COMBAT ENGINE
+// ╚══════════════════════════════════════════════════
+var Combat={
+  mkEnemy:function(cfg){var v=cfg.hp+(cfg.lv-1)*18+rnd(0,12);return{name:cfg.name,ico:cfg.ico,marca:cfg.marca,vida:v,vidaMax:v,lv:cfg.lv,pow:10+cfg.lv*6,statusEffects:[]};},
+  start:function(sc){
+    var e=this.mkEnemy(sc.enemy);G.enemy=e;G.turn=1;
+    $('cEico').textContent=sc.enemy.ico;$('cEname').textContent=sc.enemy.name;
+    $('cEmarca').textContent=sc.enemy.marca+' '+(MICONS[sc.enemy.marca]||'');
+    $('cLog').innerHTML='';$('postCombat').style.display='none';
+    $('secStory').style.display='none';$('secCombat').style.display='block';
+    FX.enemyIn();SFX.enemy();BGM.play('combat');
+    clog('⚔ '+sc.title+' — ¡Combate!','cl-sp');clog(e.name+' aparece. Vida: '+e.vida,'cl-act');
+    this.renderBtns();UI.update();log('Combate: '+e.name,'ev-danger');
+  },
+  renderBtns:function(){
+    var p=G.player,b=$('cBtns');if(!b)return;b.innerHTML='';var self=this;
+    var a=document.createElement('button');a.className='btn btn-sm btn-red';a.textContent='⚔ Atacar';a.onclick=function(){self.atk();};b.appendChild(a);
+    if(p.marca&&p.marca!=='Nulo'){
+      (SKILLS[p.marca]||[]).forEach(function(sk){
+        var off=p.mana<sk.cost;var sb=document.createElement('button');
+        sb.className='btn btn-sm btn-violet'+(off?' btn-disabled':'');
+        sb.textContent=sk.i+' '+sk.n+' ('+sk.cost+'◈)';sb.disabled=off;
+        if(!off)sb.onclick=(function(s){return function(){Combat.skill(s);};})(sk);
+        b.appendChild(sb);
+      });
+    }
+    var d=document.createElement('button');d.className='btn btn-sm btn-teal';d.textContent='🛡 Defender';d.onclick=function(){self.def();};b.appendChild(d);
+    var f=document.createElement('button');f.className='btn btn-sm';f.textContent='↩ Huir';f.onclick=function(){self.flee();};b.appendChild(f);
+  },
+  dmg:function(base,attr){return Math.max(1,Math.floor(base*(1+(attr||0)*.09))+rnd(-3,3));},
+  addFx:function(t,fx){if(!fx)return;var i=-1;(t.statusEffects||[]).forEach(function(f,j){if(f.tp===fx.tp)i=j;});if(i>=0)t.statusEffects[i].tu=fx.tu;else(t.statusEffects=t.statusEffects||[]).push({tp:fx.tp,lb:fx.lb,tu:fx.tu});},
+  tickFx:function(t){t.statusEffects=(t.statusEffects||[]).map(function(f){return{tp:f.tp,lb:f.lb,tu:f.tu-1};}).filter(function(f){return f.tu>0;});},
+  ePos:function(){return pos('enemyCard');},pPos:function(){return pos('gAvatar');},
+  after:function(){
+    if(G.enemy.vida<=0){G.enemy.vida=0;this.win();return;}
+    this.enemyTurn();UI.update();this.renderBtns();
+  },
+  atk:function(){
+    var p=G.player,e=G.enemy;
+    var d=this.dmg(9+p.attrs.fuerza*2,p.attrs.fuerza);
+    var slow=(e.statusEffects||[]).some(function(f){return f.tp==='slow';});if(slow)d=Math.floor(d*1.2);
+    e.vida=cl(e.vida-d,0,e.vidaMax);
+    clog('Atacas a '+e.name+': −'+d+(slow?' (lento)':''),'cl-dmg');
+    var ep=this.ePos();FX.hit(false,d);SFX.damage(false);
+    var ec=$('enemyCard');if(ec){ec.classList.remove('ehit');void ec.offsetWidth;ec.classList.add('ehit');}
+    this.after();
+  },
+  def:function(){
+    this.addFx(G.player,{tp:'shield',lb:'🛡 Defend.',tu:1});
+    clog('Posición defensiva.','cl-act');SFX.skill('Realidad');FX.mana(G.player.marca);this.after();
+  },
+  flee:function(){
+    var p=G.player,ch=.28+p.attrs.velocidad*.07;
+    if(Math.random()<ch){
+      clog('¡Escapaste!','cl-act');log('Huiste del combate.','ev-info');
+      G.enemy=null;$('secCombat').style.display='none';$('secStory').style.display='block';
+      BGM.play('story');Story.loadScene('c1s1');
+    }else{clog('¡Huida fallida!','cl-dmg');SFX.damage(false);this.enemyTurn();}
+    UI.update();
+  },
+  skill:function(sk){
+    var p=G.player,e=G.enemy;
+    if(p.mana<sk.cost){clog('Maná insuficiente.','cl-act');return;}
+    p.mana-=sk.cost;var ctrl=1+p.attrs.control*.05;
+    var hpow=p.hpow||1;
+    SFX.skill(p.marca);FX.skill(p.marca,sk.t);FX.mana(p.marca);
+    if(sk.t==='spe'){
+      p.anchored=3;this.addFx(p,{tp:'shield',lb:'⚓ Anclado',tu:3});
+      clog('Anclaje Temporal (3 turnos).','cl-sp');
+      if(Math.random()<.22){var md=rnd(4,10);p.vida=cl(p.vida-md,0,p.vidaMax);clog('Inestabilidad: −'+md,'cl-dmg');}
+    }else if(sk.t==='drain'){
+      var d=this.dmg(sk.pow*ctrl*hpow,p.attrs.intelig),h=Math.floor(d*.5);
+      e.vida=cl(e.vida-d,0,e.vidaMax);p.vida=cl(p.vida+h,0,p.vidaMax);
+      if(sk.st)this.addFx(e,sk.st);
+      clog(sk.n+': −'+d+' a enemigo, +'+h+' Vida propia','cl-heal');
+      FX.hit(false,d);FX.heal(h);SFX.heal();
+    }else if(sk.t==='atk'){
+      var d2=this.dmg(sk.pow*ctrl*hpow,p.attrs.intelig);
+      e.vida=cl(e.vida-d2,0,e.vidaMax);if(sk.st)this.addFx(e,sk.st);
+      clog(sk.n+': −'+d2+(sk.st?' ['+sk.st.lb+']':''),'cl-dmg');
+      FX.hit(false,d2);var ec=$('enemyCard');if(ec){ec.classList.remove('ehit');void ec.offsetWidth;ec.classList.add('ehit');}SFX.damage(false);
+    }else if(sk.t==='heal'){
+      var h2=this.dmg(sk.pow*ctrl*hpow,p.attrs.control);
+      p.vida=cl(p.vida+h2,0,p.vidaMax);clog(sk.n+': +'+h2+' Vida','cl-heal');FX.heal(h2);SFX.heal();
+    }
+    log('Usaste '+sk.n+' ('+sk.cost+' Maná).','ev-action');
+    this.after();
+  },
+  enemyTurn:function(){
+    var p=G.player,e=G.enemy;G.turn++;
+    this.tickFx(e);this.tickFx(p);if(p.anchored>0)p.anchored--;
+    // Burn DoT
+    var burn=(e.statusEffects||[]).some(function(f){return f.tp==='burn';});
+    if(burn){var bd=rnd(3,8);e.vida=cl(e.vida-bd,0,e.vidaMax);clog(e.name+' arde: −'+bd,'cl-dmg');}
+    if(e.vida<=0){this.win();return;}
+    // Slow skip chance
+    var slow=(e.statusEffects||[]).some(function(f){return f.tp==='slow';});
+    if(slow&&Math.random()<.38){clog(e.name+' ralentizado, pierde turno.','cl-act');}
+    else{
+      var d=e.pow+rnd(0,9);
+      var defending=(p.statusEffects||[]).some(function(f){return f.tp==='shield';});
+      var res=p.attrs.resisten*.065;
+      if(defending)d=Math.floor(d*.44);if(p.anchored>0)d=Math.floor(d*.35);
+      d=Math.max(1,Math.floor(d*(1-res)));
+      p.vida=cl(p.vida-d,0,p.vidaMax);
+      clog(e.name+' ataca: −'+d+(defending?' (bloqueado)':'')+(p.anchored>0?' (anclaje)':''),'cl-e');
+      var eico=$('cEico');if(eico){eico.classList.remove('swing');void eico.offsetWidth;eico.classList.add('swing');}
+      FX.hit(true,d);SFX.damage(d>20);
+    }
+    clog('— Turno '+G.turn+' —','cl-tn');
+    if(p.vida<=0){p.vida=0;UI.update();setTimeout(function(){Story.gameover('Fuiste derrotado por '+G.enemy.name+'.');},600);return;}
+    UI.update();
+  },
+  win:function(){
+    var p=G.player,sc=G.scene;p.kills++;G.kills++;
+    var xg=sc&&sc.xp?sc.xp:35,mg=rnd(8,22);
+    p.mana=cl(p.mana+mg,0,p.manaMax);
+    clog('¡Victoria! +'+xg+' XP, +'+mg+' Maná','cl-sp');log('Victoria: '+G.enemy.name,'ev-success');
+    SFX.victory();FX.victory();giveXP(p,xg);
+    var nxt=sc&&sc.onWin?sc.onWin:null;
+    $('postCombat').style.display='block';$('postTitle').textContent='¡Victoria!';
+    var pt=$('postText');if(pt)pt.innerHTML='<p>'+G.enemy.name+' derrotado. +'+xg+' XP, +'+mg+' Maná.</p>';
+    var pc=$('postChoices');if(pc){
+      pc.innerHTML='';
+      if(nxt==='ending'){
+        var btn=document.createElement('button');btn.className='choice-btn';
+        btn.innerHTML='<span class="ck">→</span><div>Ver el desenlace de tu historia</div>';
+        btn.onclick=function(){SFX.choice();Story.ending();};pc.appendChild(btn);
+      }else if(nxt){
+        var btn2=document.createElement('button');btn2.className='choice-btn';
+        btn2.innerHTML='<span class="ck">→</span><div>Continuar la historia</div>';
+        btn2.onclick=(function(n){return function(){SFX.choice();$('postCombat').style.display='none';$('secStory').style.display='block';$('secCombat').style.display='none';BGM.play('story');Story.loadScene(n);};})(nxt);
+        pc.appendChild(btn2);
+      }
+    }
+    UI.update();UI.skills(p);
+  }
+};
+
+// ╔══════════════════════════════════════════════════
+//  GUARDADO LOCAL — respaldo automático en el dispositivo
+// ╚══════════════════════════════════════════════════
+var LS_KEY='paralex_save_v1';
+var LocalSave={
+  pack:function(){
+    if(!G.player)return null;
+    return{
+      player:JSON.parse(JSON.stringify(G.player)),
+      sceneId:G.scene?G.scene.id:null,
+      flags:JSON.parse(JSON.stringify(G.flags)),
+      kills:G.kills,
+      chReach:G.chReach,
+      savedAt:Date.now()
+    };
+  },
+  save:function(){
+    var d=this.pack();if(!d)return false;
+    try{
+      localStorage.setItem(LS_KEY,JSON.stringify(d));
+      // Mostrar botón continuar si existe
+      var btn=$('btnContinuar');if(btn)btn.style.display='';
+      return true;
+    }
+    catch(e){return false;}
+  },
+  load:function(){
+    try{var d=localStorage.getItem(LS_KEY);return d?JSON.parse(d):null;}
+    catch(e){return null;}
+  },
+  hasData:function(){return!!this.load();}
+};
+
+// ╔══════════════════════════════════════════════════
+//  MENU — Nueva Partida / Continuar
+// ╚══════════════════════════════════════════════════
+var Menu={
+  checkSave:function(){
+    var btn=$('btnContinuar');
+    if(!btn)return;
+    btn.style.display=''; // siempre visible
+    var hasSave=LocalSave.hasData()||(Cloud&&Cloud._user?true:false);
+    if(hasSave){
+      btn.disabled=false;
+      btn.classList.remove('btn-continue-off');
+    }else{
+      btn.disabled=true;
+      btn.classList.add('btn-continue-off');
+    }
+  },
+
+  nuevaPartida:function(){
+    if(LocalSave.hasData()||Cloud._user){
+      if(!confirm('¿Estás seguro? Tu partida actual se perderá para siempre.')){return;}
+    }
+    try{localStorage.removeItem('paralex_save_v1');}catch(e){}
+    if(typeof Menu!=='undefined')Menu.checkSave();
+    Nav.go('create');
+  },
+
+  continuar:function(){
+    if(Cloud._user&&Cloud._configured){
+      // Con sesión: cargar desde nube, con fallback a local
+      Cloud.autoLoad();
+      return;
+    }
+    // Sin sesión: cargar desde local
+    var data=LocalSave.load();
+    if(data){
+      Cloud.applyLoad(data);
+    }else{
+      Cloud.toast('No hay partida guardada','err');
+      Menu.checkSave();
+    }
+  }
+};
+
+// ╔══════════════════════════════════════════════════
+//  CLOUD SAVE — Google + respaldo local automático
+// ╚══════════════════════════════════════════════════
+var Cloud={
+  _auth:null,
+  _db:null,
+  _user:null,
+  _configured:false,
+
+  setup:function(auth,db){
+    this._auth=auth;
+    this._db=db;
+    this._configured=true;
+    this.renderBtns();
+    this.updateUI();
+  },
+
+  onAuthChange:function(user){
+    this._user=user||null;
+    this.updateUI();
+    this.renderBtns();
+    if(user){
+      if(G.player){
+        this.saveToCloud(false);
+        this.toast('Sesión iniciada — progreso guardado en la nube ✓','ok');
+      }
+      // No cargar automáticamente — el jugador decide desde el menú
+    }
+    // Actualizar botón continuar
+    setTimeout(function(){if(typeof Menu!=='undefined')Menu.checkSave();},300);
+  },
+
+  updateUI:function(){
+    var u=this._user;
+    var nameEl=$('cloudName'),subEl=$('cloudSub'),badgeEl=$('cloudBadge'),
+        badgeTxt=$('cloudBadgeTxt'),avatarEl=$('cloudAvatar');
+    if(!nameEl)return;
+    if(u){
+      nameEl.textContent=u.displayName||u.email||'Portador';
+      subEl.textContent=u.email||'Cuenta de Google';
+      badgeEl.className='cloud-badge online';
+      badgeTxt.textContent='Nube';
+      avatarEl.innerHTML=u.photoURL?'<img src="'+u.photoURL+'" alt="">':'<span style="font-size:14px">👤</span>';
+    }else{
+      nameEl.textContent='Invitado';
+      subEl.textContent='Progreso guardado en este dispositivo';
+      badgeEl.className='cloud-badge offline';
+      badgeTxt.textContent='Sin sesión';
+      avatarEl.innerHTML='<span style="font-size:14px">👤</span>';
+      var st=$('cloudSaveTime');if(st)st.style.display='none';
+    }
+  },
+
+  renderBtns:function(){
+    var c=$('cloudBtns');if(!c)return;
+    c.innerHTML='';
+    var u=this._user,self=this;
+    if(!u){
+      // Sin sesión — solo botón de Google
+      c.appendChild(this._mkBtn('🔑','Iniciar sesión con Google','Guarda y juega desde cualquier dispositivo','google',function(){self.signIn();}));
+    }else{
+      // Con sesión Google
+      c.appendChild(this._mkBtn('☁','Guardar en la Nube','Sincronizar progreso ahora','save',function(){self.saveToCloud(true);}));
+      c.appendChild(this._mkBtn('📥','Cargar desde la Nube','Restaurar tu última partida guardada','load',function(){self.loadFromCloud(true);}));
+      c.appendChild(this._mkBtn('🚪','Cerrar Sesión','','danger',function(){self.signOut();}));
+    }
+    // Botón salir de partida — siempre visible si hay partida activa
+    if(G.player){
+      c.appendChild(this._mkBtn('🏠','Salir de la Partida','Volver al menú principal','danger',function(){
+        // Guardar antes de salir
+        if(Cloud._user&&Cloud._configured){Cloud.saveToCloud(false);}
+        else{LocalSave.save();}
+        Profile.close();
+        Nav.go('intro');
+        // Actualizar botón continuar
+        setTimeout(function(){Menu.checkSave();},200);
+      }));
+    }
+  },
+
+  _mkBtn:function(ico,label,sub,type,cb){
+    var b=document.createElement('button');
+    b.className='cloud-btn '+(type||'');
+    b.innerHTML='<span class="cloud-btn-ico">'+ico+'</span>'
+      +'<div class="cloud-btn-lbl"><strong>'+label+'</strong>'
+      +(sub?'<span>'+sub+'</span>':'')+'</div>';
+    b.onclick=cb;return b;
+  },
+
+  signIn:function(){
+    if(window._fbSignIn)window._fbSignIn();
+    else this.toast('Firebase cargando, intenta de nuevo','err');
+  },
+
+  signOut:function(){
+    if(window._fbSignOut)window._fbSignOut();
+  },
+
+  _serialize:function(){
+    if(!G.player)return null;
+    return{
+      player:JSON.parse(JSON.stringify(G.player)),
+      sceneId:G.scene?G.scene.id:null,
+      flags:JSON.parse(JSON.stringify(G.flags)),
+      kills:G.kills,
+      chReach:G.chReach,
+      savedAt:Date.now(),
+      version:2
+    };
+  },
+
+  saveToCloud:function(showFeedback){
+    if(!this._user||!this._configured){
+      if(showFeedback)this.toast('Inicia sesión con Google primero','err');return;
+    }
+    var data=this._serialize();
+    if(!data){if(showFeedback)this.toast('No hay partida activa','err');return;}
+    LocalSave.save(); // Copia local de respaldo
+    var uid=this._user.uid;
+    if(window._fbSave){
+      window._fbSave(uid,data).then(function(){
+        var t=new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+        var st=$('cloudSaveTime');
+        if(st){st.style.display='';st.textContent='Última sincronización: '+t;}
+        if(showFeedback)Cloud.toast('Partida guardada en la nube ✓','ok');
+      }).catch(function(e){
+        console.warn(e);
+        if(showFeedback)Cloud.toast('Error al guardar en la nube','err');
+      });
+    }
+  },
+
+  loadFromCloud:function(showFeedback){
+    if(!this._user||!this._configured){
+      if(showFeedback)this.toast('Inicia sesión con Google primero','err');return;
+    }
+    var uid=this._user.uid;
+    if(window._fbLoad){
+      window._fbLoad(uid).then(function(data){
+        if(!data){if(showFeedback)Cloud.toast('No hay partida guardada en la nube','err');return;}
+        Cloud.applyLoad(data);
+        if(showFeedback)Cloud.toast('Partida cargada desde la nube ✓','ok');
+      }).catch(function(e){
+        console.warn(e);
+        if(showFeedback)Cloud.toast('Error al cargar desde la nube','err');
+      });
+    }
+  },
+
+  autoLoad:function(){
+    // Solo llamar manualmente desde Menu.continuar()
+    if(!this._user||!window._fbLoad)return;
+    var uid=this._user.uid;
+    window._fbLoad(uid).then(function(data){
+      if(data){
+        Cloud.applyLoad(data);
+        Cloud.toast('Partida cargada desde la nube ✓','ok');
+      }else{
+        // Si no hay en nube, intentar local
+        var local=LocalSave.load();
+        if(local){Cloud.applyLoad(local);}
+        else{Cloud.toast('No hay partida guardada','err');}
+      }
+    }).catch(function(e){
+      console.warn(e);
+      Cloud.toast('Error al cargar desde la nube','err');
+    });
+  },
+
+  applyLoad:function(data){
+    if(!data||!data.player){this.toast('Datos de partida inválidos','err');return;}
+    try{
+      G={player:null,scene:null,enemy:null,turn:1,flags:{},kills:0,chReach:1,_lastCh:0};
+      G.player=data.player;
+      G.flags=data.flags||{};
+      G.kills=data.kills||0;
+      G.chReach=data.chReach||1;
+      var p=G.player;
+      $('gAvatar')&&($('gAvatar').textContent=MICONS[p.marca]||'⧖');
+      $('gName')&&($('gName').textContent=p.name);
+      $('gMarca')&&($('gMarca').textContent='Marca de '+p.marca);
+      $('gAnomaly')&&($('gAnomaly').innerHTML='');
+      $('evLog')&&($('evLog').innerHTML='');
+      log(p.name+' regresó a Paralex.','ev-story');
+      log('Partida restaurada — Capítulo '+toRoman(G.chReach),'ev-special');
+      Nav.go('game');
+      buildChNav();buildMap(G.chReach);
+      $('secStory').style.display='block';
+      $('secCombat').style.display='none';
+      BGM.play('story');
+      var sid=data.sceneId,scene=null;
+      if(sid){
+        CHAPTERS.forEach(function(ch){
+          ch.scenes.forEach(function(sc){if(sc.id===sid)scene=sc;});
+        });
+      }
+      if(scene){
+        G.scene=scene;
+        var ch=CHAPTERS.find(function(ch){return ch.id===G.chReach;})||CHAPTERS[0];
+        Story.renderScene(scene,ch);
+      }else{
+        var ch2=CHAPTERS.find(function(ch){return ch.id===G.chReach;})||CHAPTERS[0];
+        if(ch2&&ch2.scenes[0])Story.loadScene(ch2.scenes[0].id);
+      }
+      UI.update();Profile.close();
+    }catch(e){
+      console.warn('applyLoad error:',e);
+      this.toast('Error al cargar la partida','err');
+    }
+  },
+
+  // Auto-guardado cada 90 segundos si hay sesión activa
+  startAutoSave:function(){
+    setInterval(function(){
+      if(!G.player)return;
+      if(Cloud._user&&Cloud._configured){
+        Cloud.saveToCloud(false); // Guardar en nube si hay sesión
+      } else {
+        LocalSave.save(); // Guardar localmente si no hay sesión
+      }
+    },30000); // cada 30 segundos
+  },
+
+  toast:function(msg,type){
+    var existing=document.querySelector('.cloud-toast');
+    if(existing)existing.remove();
+    var t=document.createElement('div');
+    t.className='cloud-toast '+(type||'');
+    t.textContent=msg;
+    document.body.appendChild(t);
+    setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},3000);
+  }
+};
+
+</script>
+<script>
+// ╔══════════════════════════════════════════════════
+//  INIT — DOM listo
+// ╚══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',function(){
+  buildAttrUI();
+  Cloud.renderBtns();
+  Cloud.startAutoSave();
+  Menu.checkSave();
+  // Auto-guardar en la nube al cambiar de pantalla
+  var _origNavGo=Nav.go.bind(Nav);
+  Nav.go=function(id){
+    // Solo guardar cuando hay partida activa y se navega fuera del juego
+    if(G.player&&(id==='intro'||id==='gameover'||id==='ending')){
+      if(Cloud._user&&Cloud._configured){Cloud.saveToCloud(false);}
+      else{LocalSave.save();}
+    }
+    _origNavGo(id);
+    // Al volver al menú principal actualizar botón continuar
+    if(id==='intro'){setTimeout(function(){Menu.checkSave();},100);}
+  };
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')Profile.close();});
+
+</script>
+
+<!-- Firebase v12 — módulo ES -->
+<script type="module">
+  import { initializeApp }          from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  import { getAnalytics }           from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+                                    from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, serverTimestamp }
+                                    from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyAdbVLkbgTT3BY4u-TRFJdrOXtcwXXH6gU",
+    authDomain:        "blockz21.firebaseapp.com",
+    projectId:         "blockz21",
+    storageBucket:     "blockz21.firebasestorage.app",
+    messagingSenderId: "72455467286",
+    appId:             "1:72455467286:web:9568489e7b08fd0afd6037",
+    measurementId:     "G-RGY3ZX32W5"
+  };
+
+  const app      = initializeApp(firebaseConfig);
+  getAnalytics(app);
+  const auth     = getAuth(app);
+  const db       = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  // Exponer funciones al objeto Cloud
+  window._fbSignOut = async () => {
+    try { await signOut(auth); Cloud.toast('Sesión cerrada','ok'); }
+    catch(e) { console.warn(e); }
+  };
+
+  window._fbSave = async (uid, data) => {
+    data.savedAt = serverTimestamp();
+    await setDoc(doc(db, 'saves', uid), data);
+  };
+
+  window._fbLoad = async (uid) => {
+    const snap = await getDoc(doc(db, 'saves', uid));
+    return snap.exists() ? snap.data() : null;
+  };
+
+  window._fbSignIn = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch(e) {
+      console.warn(e.code, e.message);
+      if(e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'){
+        // El usuario cerró el popup — no es un error
+        return;
+      }
+      Cloud.toast('Error al iniciar sesión: '+e.code,'err');
+    }
+  };
+
+  // Iniciar Firebase — esperar a que el DOM esté listo
+  const initFirebase = () => {
+    Cloud.setup(auth, db);
+
+    // Escuchar cambios de sesión (cubre tanto popup como redirect)
+    onAuthStateChanged(auth, (user) => {
+      Cloud._user = user || null;
+      Cloud.onAuthChange(user);
+    });
+
+
+  };
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFirebase);
+  } else {
+    initFirebase();
+  }
+</script>
+</body>
+</html>
